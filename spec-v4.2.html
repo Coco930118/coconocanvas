@@ -807,7 +807,129 @@ quiet-tuning-previous-pattern
 </section>
 <!-- ／ section#threads-spec -->
 
-<!-- 次：05 · API / SSE仕様 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- 5. API / SSE仕様                                                       -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section id="api-spec">
+  <h2>05 · API / SSE仕様</h2>
+
+  <p>
+    生成リクエストは <code>POST /api/generate</code> の1本。
+    通常はSSEストリームで進捗を流す。バッチモードだけプレーンなJSONで返す。
+  </p>
+
+  <h3>リクエスト型（GenerateRequest）</h3>
+  <pre><span class="k">interface</span> GenerateRequest {
+  platform?:       <span class="s">'x'</span> | <span class="s">'threads'</span>;  <span class="c">// デフォルト 'x'</span>
+  hint?:           string;            <span class="c">// ユーザー任意入力</span>
+  usedQueries?:    string[];          <span class="c">// 使用済みクエリ（重複回避）</span>
+  isManual?:       boolean;           <span class="c">// X スライダー手動モード</span>
+  manualColdness?: number;            <span class="c">// 手動時のみ使用</span>
+  manualRawness?:  number;            <span class="c">// 手動時のみ使用</span>
+  previousPattern?: string;           <span class="c">// 前回パターン（構文繰り返し防止）</span>
+  count?:          number;            <span class="c">// 3 で3パターン並列生成</span>
+  batch?:          boolean;           <span class="c">// true でプレーンJSON返却</span>
+}</pre>
+
+  <h3>レスポンス型（GenerateResultData）</h3>
+  <pre><span class="k">interface</span> GenerateResultData {
+  raw:          string;   <span class="c">// Claude の生テキスト（===SECTION=== 区切り含む）</span>
+  query:        string;   <span class="c">// Tavily に投げたクエリ</span>
+  trendSummary: string;   <span class="c">// Tavily 検索結果の要約（3件・各120文字）</span>
+  coldness:     number;   <span class="c">// 実際に使った冷徹度</span>
+  rawness:      number;   <span class="c">// 実際に使った泥臭さ度</span>
+  platform:     string;
+}</pre>
+
+  <h3>2ステージ生成フロー</h3>
+  <table>
+    <thead><tr><th>ステージ</th><th>処理</th><th>SSEメッセージ</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>STAGE 1</td>
+        <td>Tavily でトレンド検索（<code>search_depth: basic</code>、最大5件）</td>
+        <td><code>searching</code> → 「トレンドを検索中…」</td>
+      </tr>
+      <tr>
+        <td>（中間）</td>
+        <td>400ms 待機（UX 用）</td>
+        <td><code>extracting</code> → 「傾向を抽出中…」</td>
+      </tr>
+      <tr>
+        <td>STAGE 2</td>
+        <td>Claude <code>claude-sonnet-4-6</code> で本文生成（max_tokens: 1500）</td>
+        <td><code>generating</code> → 「投稿を生成中…」</td>
+      </tr>
+      <tr>
+        <td>完了</td>
+        <td>results 配列を送信</td>
+        <td><code>complete</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>SSEイベント形式</h3>
+  <pre><span class="c">// 進捗</span>
+data: {"type":"progress","stage":"searching","message":"トレンドを検索中…"}
+
+<span class="c">// 完了</span>
+data: {"type":"complete","results":[{...}],"query":"...","trendSummary":"..."}
+
+<span class="c">// エラー</span>
+data: {"type":"error","message":"..."}</pre>
+
+  <h3>3パターン並列生成（count ≥ 3）</h3>
+  <pre><span class="c">// route.ts — STAGE2 を3並列で実行</span>
+<span class="k">const</span> raws = <span class="k">await</span> Promise.all(
+  [1, 2, 3].map(idx =>
+    stage2(platform, hint, coldness, rawness, previousPattern, trendSummary, idx)
+  )
+);
+<span class="c">// patternIndex を渡すことで「他と明確に異なる切り口」をプロンプトに指示する</span></pre>
+
+  <h3>バッチモード（batch: true）</h3>
+  <p>
+    SSEではなく <code>Response.json()</code> でプレーンJSON返却。
+    BatchTab が1枠ずつ順番に呼び出す。
+  </p>
+  <pre><span class="c">// バッチレスポンス</span>
+{ results: [GenerateResultData], query: string, trendSummary: string }
+
+<span class="c">// エラー時</span>
+{ error: string }  <span class="c">// status 500</span></pre>
+
+  <h3>Tavily STAGE1 — クエリバンク</h3>
+  <p>
+    プラットフォームごとに15クエリを持つ。使用済みクエリを除いてランダム選択、
+    全部使い切ったら全量リサイクル。
+  </p>
+  <table>
+    <thead><tr><th>プラットフォーム</th><th>クエリの傾向</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag-x">X</span></td>
+        <td>職場環境・マネジメント・組織文化・1on1・心理的安全性など</td>
+      </tr>
+      <tr>
+        <td><span class="tag-threads">Threads</span></td>
+        <td>人間関係の疲れ・孤独感・SNS疲れ・心地よい距離感など</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <code>TAVILY_API_KEY</code> が未設定の場合、STAGE1はスキップしてフォールバック文字列を返す。
+    生成自体は続行される。
+  </div>
+
+  <h3>サーバー設定</h3>
+  <pre><span class="c">// app/api/generate/route.ts</span>
+<span class="k">export const</span> maxDuration = 60; <span class="c">// Vercel Serverless 最大60秒</span></pre>
+
+</section>
+<!-- ／ section#api-spec -->
+
+<!-- 次：06 · localStorage仕様 -->
 
 </div><!-- /.wrap -->
 </body>
