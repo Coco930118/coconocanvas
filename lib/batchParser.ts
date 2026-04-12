@@ -61,8 +61,8 @@ function parseJpDate(src: string, isEnd: boolean): RawDate | null {
   }
 
   // Fallback: numeric YYYY/M/D H:MM or M/D H:MM
-  const numRe = /(?:(\d{4})\/)?(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{2}))?/;
-  const n = src.match(numRe);
+  const numSlashRe = /(?:(\d{4})\/)?(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{2}))?/;
+  const n = src.match(numSlashRe);
   if (n) {
     return {
       year: n[1] ? Number(n[1]) : undefined,
@@ -70,6 +70,19 @@ function parseJpDate(src: string, isEnd: boolean): RawDate | null {
       day: Number(n[3]),
       hour: n[4] !== undefined ? Number(n[4]) : isEnd ? 22 : 6,
       minute: n[5] ? Number(n[5]) : 0,
+    };
+  }
+
+  // Fallback: ISO-like YYYY-MM-DD HH:MM or MM-DD HH:MM
+  const isoRe = /(?:(\d{4})-)?(\d{1,2})-(\d{1,2})(?:[T\s](\d{1,2}):(\d{2}))?/;
+  const iso = src.match(isoRe);
+  if (iso) {
+    return {
+      year: iso[1] ? Number(iso[1]) : undefined,
+      month: Number(iso[2]),
+      day: Number(iso[3]),
+      hour: iso[4] !== undefined ? Number(iso[4]) : isEnd ? 22 : 6,
+      minute: iso[5] ? Number(iso[5]) : 0,
     };
   }
 
@@ -129,11 +142,14 @@ export function parseBatchPeriod(input: string): BatchParseOutcome {
   }
 
   // Normalise separators → 〜
+  // NOTE: only replace "-" when it is clearly a separator (surrounded by spaces)
+  // to avoid mangling ISO-style dates like 2026-04-13.
   const normalised = trimmed
     .replace(/から/g, '〜')
     .replace(/まで/g, '')
     .replace(/[～~]/g, '〜')
-    .replace(/\s*[-→]\s*/g, '〜');
+    .replace(/→/g, '〜')
+    .replace(/\s+-\s+/g, '〜');
 
   const parts = normalised.split('〜');
   if (parts.length < 2) {
