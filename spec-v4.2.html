@@ -529,7 +529,131 @@ quiet-tuning-previous-pattern
 </section>
 <!-- ／ section#character -->
 
-<!-- 次：03 · X仕様 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- 3. X仕様（出力フォーマット・コピーUI）                                 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section id="x-spec">
+  <h2>03 · X仕様（出力フォーマット・コピーUI）</h2>
+
+  <p>
+    X（旧Twitter）向けの投稿生成仕様。
+    Role は「静かな調律師」。組織の問題を設計として冷静に切り分けるリーダー・管理職に向けた言葉。
+  </p>
+
+  <h3>ターゲット</h3>
+  <p>
+    気合いや寄り添いの限界を知り、組織や自分の構造的欠陥を直視して変えたいリーダー・管理職。
+    感情論ではなく、設計で解決したい人。
+  </p>
+
+  <h3>NGワード</h3>
+  <p>
+    <code>私が〜</code>、一般論、説教、<code>〜しましょう</code>、<code>きっと</code>、<code>絶対に</code>。
+    句点と絵文字の併用禁止。
+  </p>
+
+  <h3>システムプロンプト出力フォーマット</h3>
+  <p>Claude に返させるセクション区切り。この形式以外は受け付けない。</p>
+  <pre><span class="n">===THINKING===</span>
+なぜこの強弱配分にしたか。前回パターンとどう差分を出したか。
+調律師キャラをどう滲ませたか。2〜3文で簡潔に。説明しすぎない。
+<span class="n">===BODY===</span>
+投稿本文。名言は含めない。以下の要素を自然な流れで：
+・現場の体温（少し格好悪い、ふとしたエピソード）
+・構造の指摘（設計の問題として冷徹に切り分ける）
+・具体アクション ▶（生々しい一手。綺麗に整えすぎない）
+・余韻の本音（少しズレた本音1行。「我ながら」「今も少し」「なんだか」等）
+<span class="n">===MEIGEN===</span>
+名言のみ。常識を裏切る7〜18文字。語尾に💎。ハシゴを外す。
+<span class="n">===END===</span></pre>
+
+  <h3>パースロジック</h3>
+  <pre><span class="c">// lib/parseResponse.ts</span>
+<span class="k">function</span> parseXResponse(raw: string): ParsedX | ParseError {
+  <span class="k">const</span> thinking = extract(raw, <span class="s">'THINKING'</span>);
+  <span class="k">const</span> body     = extract(raw, <span class="s">'BODY'</span>);
+  <span class="k">const</span> meigen   = extract(raw, <span class="s">'MEIGEN'</span>);
+  <span class="k">if</span> (!body || !meigen) <span class="k">return</span> { success: false, raw };
+  <span class="k">return</span> { success: true, thinking, body, meigen };
+}
+
+<span class="c">// セクション抽出（共通ユーティリティ）</span>
+<span class="k">const</span> re = <span class="k">new</span> RegExp(<span class="s">`===<span class="t">${name}</span>===([\\s\\S]*?)(?:===[A-Z]+===|$)`</span>);
+<span class="k">return</span> raw.match(re)?.[1].trim() ?? <span class="s">''</span>;</pre>
+
+  <h3>UI — 3ブロック出力 <span class="new-in-v42">v4.2</span></h3>
+  <p>v4.2 から出力を3つの独立したブロックに分割。各ブロックは互いに干渉しない。</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>ブロック</th><th>表示スタイル</th><th>コピー対象</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>①</td>
+        <td>キャラクター思考（THINKING）</td>
+        <td><code>opacity-40 italic select-none pointer-events-none</code><br>左ボーダー付き。コピー不可。aria-hidden</td>
+        <td>—（コピーボタンなし）</td>
+      </tr>
+      <tr>
+        <td>②</td>
+        <td>本文（BODY）</td>
+        <td><code>bg-zinc-900/60 border-zinc-800</code></td>
+        <td>BODY テキストのみ。ラベル含まず</td>
+      </tr>
+      <tr>
+        <td>③</td>
+        <td>名言（MEIGEN）</td>
+        <td><code>bg-indigo-950 border-indigo-600 rounded-none font-mono tracking-wider</code></td>
+        <td>MEIGEN テキストのみ</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    品質ラベル（冷徹寄り / 泥臭さ寄り / バランス型）は名言ブロックの<strong>外</strong>に
+    <code>select-none</code> で表示する。コピーには一切含まれない。
+  </div>
+
+  <h3>品質ラベル導出（getXQuality）</h3>
+  <pre><span class="k">function</span> getXQuality(coldness: number, rawness: number): string {
+  <span class="k">if</span> (coldness >= 7) <span class="k">return</span> <span class="s">'冷徹寄り'</span>;
+  <span class="k">if</span> (rawness  >= 7) <span class="k">return</span> <span class="s">'泥臭さ寄り'</span>;
+  <span class="k">return</span> <span class="s">'バランス型'</span>;
+}</pre>
+
+  <h3>コピーUIまとめ</h3>
+  <table>
+    <thead><tr><th>ボタン</th><th>コピーされるテキスト</th></tr></thead>
+    <tbody>
+      <tr><td>本文コピー</td><td>BODY セクションのテキストのみ</td></tr>
+      <tr><td>名言コピー</td><td>MEIGEN セクションのテキストのみ</td></tr>
+    </tbody>
+  </table>
+
+  <h3>文字数カウント（CharCount）</h3>
+  <p>
+    本文ブロック直下に表示。X は 280文字を上限として残り文字数を表示する。
+    超過時は赤表示。
+  </p>
+
+  <h3>再生成・お気に入り</h3>
+  <ul>
+    <li>「別パターンを生成」— 同じパラメータで再度 generate を呼ぶ。クールダウン 5秒</li>
+    <li>「お気に入りに保存」— <code>addToHistory</code> + <code>addToFavorites</code> を同時実行</li>
+  </ul>
+
+  <h3>3パターン同時生成（count: 3）</h3>
+  <p>
+    Threads タブのみの機能。X タブは現状シングル生成のみ。
+    <code>count: 3</code> を指定すると <code>Promise.all</code> で3並列生成し、
+    グリッドレイアウト（<code>md:grid-cols-3</code>）で並べて表示する。
+  </p>
+
+</section>
+<!-- ／ section#x-spec -->
+
+<!-- 次：04 · Threads仕様 -->
 
 </div><!-- /.wrap -->
 </body>
