@@ -653,7 +653,161 @@ quiet-tuning-previous-pattern
 </section>
 <!-- ／ section#x-spec -->
 
-<!-- 次：04 · Threads仕様 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- 4. Threads仕様（お守り言葉・キャラクター質感）                         -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section id="threads-spec">
+  <h2>04 · Threads仕様（お守り言葉・キャラクター質感）</h2>
+
+  <p>
+    Threads 向けの投稿生成仕様。Role は「夜の静かな共犯者」。
+    人間関係に静かな疲れを抱えた大人に向けて、押しつけない距離感で言葉を置く。
+  </p>
+
+  <h3>ターゲット</h3>
+  <p>
+    人間関係に静かな疲れやモヤモヤを抱え、
+    自分自身の心地よい距離や温度をそっと探している大人。
+  </p>
+
+  <h3>NGワード</h3>
+  <p>
+    <code>なんか</code>、<code>〜だよね</code>、<code>正直</code>、<code>けっこう</code>、<code>たぶん</code>、
+    <code>頑張ろう</code>、<code>〜すべき</code>、<code>きっと</code>、<code>絶対に</code>。
+  </p>
+
+  <h3>投稿スタイル（Threads固有）</h3>
+  <ul>
+    <li>パンクな精神は意図的に滲ませない。ふとした瞬間に少しだけ顔を出す程度</li>
+    <li>行儀の悪い本音を1箇所だけ入れて、静かな共犯関係を作る</li>
+    <li>余白と距離感を最優先。押しつけない</li>
+    <li>テンプレートの順番は崩した方が自然。流れを優先する</li>
+    <li>文章は綺麗に完結させない。余韻で閉じる</li>
+  </ul>
+
+  <h3>システムプロンプト出力フォーマット</h3>
+  <pre><span class="n">===THINKING===</span>
+パンクさをどう滲ませたか。お守り言葉にどの質を選んだか（しずく・しらたま・ひより）。
+前回パターンとの差分。2〜3文で。
+<span class="n">===BODY===</span>
+投稿本文。番号は書かない。以下の要素を自然な順で：
+・逆張りフック（1行目・逆説的・引用符なし）
+・本質展開（静かな断言）
+・人間味1滴（言葉にならないモヤモヤや、少し複雑な感覚をそのまま置く）
+・ポジティブ一言（小さな変化・気づき）
+・小さな行動の余白（押しつけず読者が自分で選べる軽さで1行。行末？）
+・問いかけ（💍で締め。毎回バリエーションを変える）
+<span class="n">===OMAMORI===</span>
+お守り言葉：1行のみ。語尾に💍。
+しずく＝静かで少し冷たい断言 ／
+しらたま＝軽やかで芯のある気ままさ ／
+ひより＝柔らかく包むような確信。説明しない。解釈は読者に委ねる。
+<span class="n">===END===</span></pre>
+
+  <h3>キャラクター質感 3種 <span class="new-in-v42">v4.2</span></h3>
+  <p>
+    お守り言葉はこの3種のどれかを毎回選ぶ。
+    THINKING セクションに質感名が登場するので、そこからパースして UI 表示に使う。
+  </p>
+  <table>
+    <thead><tr><th>質感</th><th>言葉のリズム</th><th>色・スタイル（UI）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>しずく</strong></td>
+        <td>短く断ち切る。説明しない。断言の後に何も足さない。冷たい静けさ</td>
+        <td><code>text-amber-500</code> / ブロック外ラベルに表示</td>
+      </tr>
+      <tr>
+        <td><strong>しらたま</strong></td>
+        <td>少し転がす口調。軽さの中に芯だけある。まとめに向かわない、流す</td>
+        <td>同上</td>
+      </tr>
+      <tr>
+        <td><strong>ひより</strong></td>
+        <td>温もりのある確信を一言で包む。長くしない。解釈は読者に渡す</td>
+        <td>同上</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>キャラクター名のパース（getThreadsQuality）</h3>
+  <pre><span class="k">function</span> getThreadsQuality(thinking: string): string {
+  <span class="k">if</span> (thinking.includes(<span class="s">'しずく'</span>)) <span class="k">return</span> <span class="s">'（しずく）'</span>;
+  <span class="k">if</span> (thinking.includes(<span class="s">'しらたま'</span>)) <span class="k">return</span> <span class="s">'（しらたま）'</span>;
+  <span class="k">if</span> (thinking.includes(<span class="s">'ひより'</span>)) <span class="k">return</span> <span class="s">'（ひより）'</span>;
+  <span class="k">return</span> <span class="s">''</span>;
+}
+
+<span class="c">// UI での使い方（ThreadsTab.tsx / SlotCard）</span>
+<span class="k">const</span> qualityName = getThreadsQuality(parsed.thinking).replace(/[（）]/g, <span class="s">''</span>);</pre>
+
+  <h3>UI — 3ブロック出力 <span class="new-in-v42">v4.2</span></h3>
+  <table>
+    <thead>
+      <tr><th>#</th><th>ブロック</th><th>表示スタイル</th><th>コピー対象</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>①</td>
+        <td>キャラクター思考（THINKING）</td>
+        <td><code>opacity-40 italic select-none pointer-events-none</code><br>左ボーダー付き。コピー不可</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>②</td>
+        <td>本文（BODY）</td>
+        <td><code>bg-zinc-900/60 border-zinc-800 rounded-2xl</code></td>
+        <td>BODY テキストのみ</td>
+      </tr>
+      <tr>
+        <td>③</td>
+        <td>お守り言葉（OMAMORI）</td>
+        <td><code>bg-amber-950 border-amber-500 rounded-2xl font-serif text-amber-200</code></td>
+        <td>OMAMORI テキストのみ（キャラ名は含まない）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <strong>表示とコピーの分離（重要）：</strong><br>
+    キャラクター名（しずく / しらたま / ひより）はブロックの<strong>外</strong>に
+    <code>select-none</code> で表示する。<br>
+    コピーボタンには OMAMORI テキストのみを渡す。キャラ名は絶対にクリップボードに入らない。
+  </div>
+
+  <h3>表示例</h3>
+  <pre><span class="c">/* ブロック外のラベル部分（select-none、コピー不可） */</span>
+&lt;div class="flex items-center gap-2 mb-1.5 select-none"&gt;
+  &lt;span class="text-xs text-amber-600"&gt;お守り言葉&lt;/span&gt;
+  &lt;span class="text-sm text-amber-500 font-medium"&gt;{qualityName}&lt;/span&gt;
+&lt;/div&gt;
+
+<span class="c">/* コピーボタンには純粋なテキストだけ渡す */</span>
+&lt;OutputBlock
+  text={parsed.omamori}
+  copyLabel="お守り言葉コピー"
+  blockClassName="bg-amber-950 border border-amber-500 rounded-2xl"
+  textClassName="text-amber-200 text-sm font-serif leading-loose"
+/&gt;</pre>
+
+  <h3>コピーUIまとめ</h3>
+  <table>
+    <thead><tr><th>ボタン</th><th>コピーされるテキスト</th></tr></thead>
+    <tbody>
+      <tr><td>本文コピー</td><td>BODY セクションのテキストのみ</td></tr>
+      <tr><td>お守り言葉コピー</td><td>OMAMORI セクションのテキストのみ（キャラ名なし）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>文字数カウント（CharCount）</h3>
+  <p>
+    本文ブロック直下に表示。Threads は 500文字を上限として残り文字数を表示する。
+  </p>
+
+</section>
+<!-- ／ section#threads-spec -->
+
+<!-- 次：05 · API / SSE仕様 -->
 
 </div><!-- /.wrap -->
 </body>
