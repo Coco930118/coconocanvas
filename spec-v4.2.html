@@ -211,6 +211,73 @@
     margin-left: 6px;
     vertical-align: middle;
   }
+
+  /* ── ui mockup preview ── */
+  .ui-mock {
+    background: #090a0b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.25rem 1rem;
+    margin: 1rem 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+    font-size: 12px;
+  }
+  .mock-thinking {
+    opacity: .3;
+    font-style: italic;
+    color: var(--text);
+    padding-left: .85rem;
+    border-left: 2px solid #2a2a30;
+    line-height: 1.75;
+    user-select: none;
+    pointer-events: none;
+  }
+  .mock-block {
+    background: #0f0f12;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .mock-block.meigen  { border-color: #312e81; }
+  .mock-block.omamori { border-color: #78350f; }
+  .mock-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .35rem .75rem;
+    border-bottom: 1px solid var(--border);
+    background: #0d0d10;
+  }
+  .mock-lbl {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+  .mock-copy-btn {
+    font-size: 10px;
+    background: #1a1a1e;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 3px;
+    padding: 2px 7px;
+  }
+  .mock-body {
+    padding: .75rem;
+    color: #8a8a9a;
+    white-space: pre-wrap;
+    line-height: 1.8;
+  }
+  .mock-body.meigen  { color: #a5b4fc; font-family: monospace; letter-spacing: .04em; }
+  .mock-body.omamori { color: #fcd34d; font-family: serif; }
+  .mock-char {
+    display: block;
+    font-size: 12px;
+    color: #d97706;
+    padding: .6rem .75rem .15rem;
+    user-select: none;
+  }
 </style>
 </head>
 <body>
@@ -536,8 +603,8 @@ quiet-tuning-previous-pattern
   <h2>03 · X仕様（出力フォーマット・コピーUI）</h2>
 
   <p>
-    X（旧Twitter）向けの投稿生成仕様。
-    Role は「静かな調律師」。組織の問題を設計として冷静に切り分けるリーダー・管理職に向けた言葉。
+    X（旧Twitter）向け。Role は「静かな調律師」—
+    設計で解決しようとしているリーダーに、静かに届く言葉を置く。
   </p>
 
   <h3>ターゲット</h3>
@@ -582,7 +649,7 @@ quiet-tuning-previous-pattern
 <span class="k">return</span> raw.match(re)?.[1].trim() ?? <span class="s">''</span>;</pre>
 
   <h3>UI — 3ブロック出力 <span class="new-in-v42">v4.2</span></h3>
-  <p>v4.2 から出力を3つの独立したブロックに分割。各ブロックは互いに干渉しない。</p>
+  <p>3つの独立したブロック。それぞれが互いに干渉しない。</p>
 
   <table>
     <thead>
@@ -592,20 +659,20 @@ quiet-tuning-previous-pattern
       <tr>
         <td>①</td>
         <td>キャラクター思考（THINKING）</td>
-        <td><code>opacity-40 italic select-none pointer-events-none</code><br>左ボーダー付き。コピー不可。aria-hidden</td>
+        <td><code>opacity-30 italic select-none pointer-events-none</code><br>左ボーダー付き。コードブロックの外に dim テキストで置くだけ。aria-hidden</td>
         <td>—（コピーボタンなし）</td>
       </tr>
       <tr>
         <td>②</td>
         <td>本文（BODY）</td>
         <td><code>bg-zinc-900/60 border-zinc-800</code></td>
-        <td>BODY テキストのみ。ラベル含まず</td>
+        <td>BODY テキストのみ。ブロック内に見出し・ラベル等は一切含まない</td>
       </tr>
       <tr>
         <td>③</td>
         <td>名言（MEIGEN）</td>
-        <td><code>bg-indigo-950 border-indigo-600 rounded-none font-mono tracking-wider</code></td>
-        <td>MEIGEN テキストのみ</td>
+        <td><code>bg-indigo-950 border-indigo-600 font-mono tracking-wider</code></td>
+        <td>MEIGEN テキストのみ（1行）。ブロック内に説明は含まない</td>
       </tr>
     </tbody>
   </table>
@@ -630,6 +697,36 @@ quiet-tuning-previous-pattern
       <tr><td>名言コピー</td><td>MEIGEN セクションのテキストのみ</td></tr>
     </tbody>
   </table>
+
+  <h3>レイアウト例（X）</h3>
+  <div class="ui-mock">
+    <div class="mock-thinking">
+      冷徹8、泥臭さ3 — 組織の構造を切り分けることを優先した。前回の語尾と逆のリズムで断ち切る形にした。
+    </div>
+    <div class="mock-block">
+      <div class="mock-block-header">
+        <span class="mock-lbl">本文</span>
+        <span class="mock-copy-btn">本文コピー</span>
+      </div>
+      <div class="mock-body">人員が足りないと言いながら、会議は増えていく。
+問題は人数ではなく、設計の不在だと思う。
+
+▶ 会議の議題を「決定」か「共有」か、最初の5秒で仕分ける
+
+我ながら、長い間その区別をしていなかった</div>
+    </div>
+    <div class="mock-block meigen">
+      <div class="mock-block-header">
+        <span class="mock-lbl">名言</span>
+        <span class="mock-copy-btn">名言コピー</span>
+      </div>
+      <div class="mock-body meigen">会議が多い組織は、決定を恐れている💎</div>
+    </div>
+  </div>
+  <div class="note">
+    THINKING はコードブロックの<strong>外</strong>に薄く置くだけ。コピー不可。<br>
+    BODY・MEIGEN のブロック内には見出しやラベルを一切含まない — そのまま投稿できる純粋なテキストのみ。
+  </div>
 
   <h3>文字数カウント（CharCount）</h3>
   <p>
@@ -660,8 +757,8 @@ quiet-tuning-previous-pattern
   <h2>04 · Threads仕様（お守り言葉・キャラクター質感）</h2>
 
   <p>
-    Threads 向けの投稿生成仕様。Role は「夜の静かな共犯者」。
-    人間関係に静かな疲れを抱えた大人に向けて、押しつけない距離感で言葉を置く。
+    Threads 向け。Role は「夜の静かな共犯者」—
+    人間関係に静かな疲れを抱えた大人に、押しつけずそっと寄り添う言葉を置く。
   </p>
 
   <h3>ターゲット</h3>
@@ -750,39 +847,38 @@ quiet-tuning-previous-pattern
       <tr>
         <td>①</td>
         <td>キャラクター思考（THINKING）</td>
-        <td><code>opacity-40 italic select-none pointer-events-none</code><br>左ボーダー付き。コピー不可</td>
+        <td><code>opacity-30 italic select-none pointer-events-none</code><br>左ボーダー付き。コードブロックの外に dim テキストで置くだけ</td>
         <td>—</td>
       </tr>
       <tr>
         <td>②</td>
         <td>本文（BODY）</td>
         <td><code>bg-zinc-900/60 border-zinc-800 rounded-2xl</code></td>
-        <td>BODY テキストのみ</td>
+        <td>BODY テキストのみ。ブロック内に見出し・ラベルは含まない</td>
       </tr>
       <tr>
         <td>③</td>
         <td>お守り言葉（OMAMORI）</td>
         <td><code>bg-amber-950 border-amber-500 rounded-2xl font-serif text-amber-200</code></td>
-        <td>OMAMORI テキストのみ（キャラ名は含まない）</td>
+        <td>OMAMORI テキストのみ（1行）。キャラ名はブロック外に単独表示</td>
       </tr>
     </tbody>
   </table>
 
   <div class="warn">
     <strong>表示とコピーの分離（重要）：</strong><br>
-    キャラクター名（しずく / しらたま / ひより）はブロックの<strong>外</strong>に
-    <code>select-none</code> で表示する。<br>
+    キャラクター名（しずく / しらたま / ひより）はブロックの<strong>上</strong>に単独で表示する。
+    ブロック内には含めない。<br>
     コピーボタンには OMAMORI テキストのみを渡す。キャラ名は絶対にクリップボードに入らない。
   </div>
 
   <h3>表示例</h3>
-  <pre><span class="c">/* ブロック外のラベル部分（select-none、コピー不可） */</span>
-&lt;div class="flex items-center gap-2 mb-1.5 select-none"&gt;
-  &lt;span class="text-xs text-amber-600"&gt;お守り言葉&lt;/span&gt;
-  &lt;span class="text-sm text-amber-500 font-medium"&gt;{qualityName}&lt;/span&gt;
-&lt;/div&gt;
+  <pre><span class="c">/* キャラクター名 — ブロックの上に単独で表示。select-none。コピーには入らない */</span>
+&lt;p className="text-sm text-amber-500 font-medium select-none mb-1.5"&gt;
+  {qualityName}
+&lt;/p&gt;
 
-<span class="c">/* コピーボタンには純粋なテキストだけ渡す */</span>
+<span class="c">/* お守り言葉ブロック — コピーされるのは OMAMORI テキストのみ */</span>
 &lt;OutputBlock
   text={parsed.omamori}
   copyLabel="お守り言葉コピー"
@@ -798,6 +894,40 @@ quiet-tuning-previous-pattern
       <tr><td>お守り言葉コピー</td><td>OMAMORI セクションのテキストのみ（キャラ名なし）</td></tr>
     </tbody>
   </table>
+
+  <h3>レイアウト例（Threads）</h3>
+  <div class="ui-mock">
+    <div class="mock-thinking">
+      しずくを選んだ。断ち切るリズムで、余韻だけ残す。前回は「ひより」だったので対比を意識した。
+    </div>
+    <div class="mock-block">
+      <div class="mock-block-header">
+        <span class="mock-lbl">本文</span>
+        <span class="mock-copy-btn">本文コピー</span>
+      </div>
+      <div class="mock-body">仲良くしなくていい、と気づいた日から
+少し楽になった気がした。
+
+距離を置くことは、裏切りじゃない。
+
+今日、少し遠ざかった関係があった。
+それでいい、と思えた自分が少し意外だった？
+
+あなたにとって「心地よい距離」って、どのくらい？💍</div>
+    </div>
+    <div class="mock-block omamori">
+      <span class="mock-char">しずく</span>
+      <div class="mock-block-header">
+        <span class="mock-lbl">お守り言葉</span>
+        <span class="mock-copy-btn">お守り言葉コピー</span>
+      </div>
+      <div class="mock-body omamori">離れていい。それだけのこと💍</div>
+    </div>
+  </div>
+  <div class="note">
+    キャラクター名はブロックの<strong>上</strong>に単独で表示する（<code>select-none</code>）。
+    コピーボタンが取得するのは OMAMORI テキストのみ。
+  </div>
 
   <h3>文字数カウント（CharCount）</h3>
   <p>
