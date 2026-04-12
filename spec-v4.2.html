@@ -929,7 +929,120 @@ data: {"type":"error","message":"..."}</pre>
 </section>
 <!-- ／ section#api-spec -->
 
-<!-- 次：06 · localStorage仕様 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- 6. localStorage仕様                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section id="localstorage-spec">
+  <h2>06 · localStorage仕様</h2>
+
+  <p>
+    状態はすべてブラウザの <code>localStorage</code> に保持する。
+    サーバー側に履歴は持たない。SSRでのエラーを防ぐため、
+    アクセス前に必ず <code>typeof window !== 'undefined'</code> を確認する。
+  </p>
+
+  <h3>キー一覧</h3>
+  <table>
+    <thead><tr><th>キー</th><th>型</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>quiet-tuning-history</code></td>
+        <td><code>HistoryEntry[]</code></td>
+        <td>生成履歴。最大50件。古いものから順に削除</td>
+      </tr>
+      <tr>
+        <td><code>quiet-tuning-favorites</code></td>
+        <td><code>FavoriteEntry[]</code></td>
+        <td>お気に入り。上限なし</td>
+      </tr>
+      <tr>
+        <td><code>quiet-tuning-used-queries</code></td>
+        <td><code>string[]</code></td>
+        <td>使用済みTavilyクエリ。全量使い切ったらリセット</td>
+      </tr>
+      <tr>
+        <td><code>quiet-tuning-previous-pattern</code></td>
+        <td><code>string</code></td>
+        <td>前回の名言／お守り言葉の構文パターン。構文繰り返し防止に使用</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>HistoryEntry 型</h3>
+  <pre><span class="k">interface</span> HistoryEntry {
+  id:           string;            <span class="c">// 'x-{timestamp}-{idx}' or 'threads-...'</span>
+  timestamp:    number;            <span class="c">// Date.now()</span>
+  platform:     <span class="s">'x'</span> | <span class="s">'threads'</span>;
+  raw:          string;            <span class="c">// Claude 生テキスト</span>
+  thinking:     string;
+  body:         string;
+  meigen?:      string;            <span class="c">// X のみ</span>
+  omamori?:     string;            <span class="c">// Threads のみ</span>
+  coldness:     number;
+  rawness:      number;
+  trendSummary: string;
+  query:        string;
+}</pre>
+
+  <h3>主要関数（lib/localStorage.ts）</h3>
+  <pre><span class="c">// 履歴追加（最大50件でローテーション）</span>
+<span class="k">function</span> addToHistory(entry: HistoryEntry): void
+
+<span class="c">// お気に入り追加</span>
+<span class="k">function</span> addToFavorites(entry: FavoriteEntry): void
+
+<span class="c">// 使用済みクエリ管理</span>
+<span class="k">function</span> getUsedQueries(): string[]
+<span class="k">function</span> addUsedQuery(query: string): void
+
+<span class="c">// 前回パターン管理</span>
+<span class="k">function</span> getPreviousPattern(): string
+<span class="k">function</span> setPreviousPattern(pattern: string): void</pre>
+
+  <h3>SSR安全ガード</h3>
+  <pre><span class="c">// すべての関数の先頭に入れる</span>
+<span class="k">if</span> (typeof window === <span class="s">'undefined'</span>) <span class="k">return</span> defaultValue;</pre>
+
+  <h3>生成完了時のフロー</h3>
+  <p>
+    <code>useGenerate</code> フックが SSE の <code>complete</code> イベントを受け取ったとき、
+    以下を自動実行する。
+  </p>
+  <ol>
+    <li>使用したクエリを <code>addUsedQuery</code> で記録</li>
+    <li><code>extractPattern</code> で名言／お守り言葉の構文パターンを抽出</li>
+    <li><code>setPreviousPattern</code> で次回生成に引き継ぐ</li>
+  </ol>
+  <pre><span class="c">// extractPattern — MEIGEN または OMAMORI の末尾構文を抽出</span>
+<span class="k">function</span> extractPattern(raw: string, platform: <span class="s">'x'</span> | <span class="s">'threads'</span>): string {
+  <span class="k">const</span> section = platform === <span class="s">'x'</span> ? <span class="s">'MEIGEN'</span> : <span class="s">'OMAMORI'</span>;
+  <span class="k">const</span> text = extract(raw, section);
+  <span class="c">// 最後の句・節を返す（長すぎる場合は後半30文字）</span>
+  <span class="k">return</span> text.length > 30 ? text.slice(-30) : text;
+}</pre>
+
+</section>
+<!-- ／ section#localstorage-spec -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<footer style="border-top: 1px solid var(--border); padding-top: 2rem; margin-top: 4rem;">
+  <p style="font-size: 11px; color: var(--muted); letter-spacing: .05em;">
+    静かな調律師 / 投稿生成スタジオ — spec v4.2 FINAL
+    &nbsp;·&nbsp; Next.js 14 · claude-sonnet-4-6 · Tailwind CSS · Vercel
+  </p>
+  <p style="font-size: 11px; color: #333338; margin-top: .4rem;">
+    セクション：
+    <a href="#batch-schedule" style="color: #44444a; text-decoration: none;">01 バッチ</a> ·
+    <a href="#character"      style="color: #44444a; text-decoration: none;">02 キャラクター</a> ·
+    <a href="#x-spec"         style="color: #44444a; text-decoration: none;">03 X</a> ·
+    <a href="#threads-spec"   style="color: #44444a; text-decoration: none;">04 Threads</a> ·
+    <a href="#api-spec"       style="color: #44444a; text-decoration: none;">05 API</a> ·
+    <a href="#localstorage-spec" style="color: #44444a; text-decoration: none;">06 localStorage</a>
+  </p>
+</footer>
 
 </div><!-- /.wrap -->
 </body>
