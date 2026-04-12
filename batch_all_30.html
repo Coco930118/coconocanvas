@@ -6,31 +6,20 @@
 <title>投稿30枠 — 4/13〜4/18 バッチ生成結果</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg:        #0d0d0f;
-  --surface:   #141416;
-  --border:    #222226;
-  --text:      #c8c8cc;
-  --muted:     #555560;
-  --amber:     #d97706;
-  --amber-dim: #78350f;
-  --indigo:    #6366f1;
-  --indigo-dim:#312e81;
+  --bg: #0d0d0f; --surface: #141416; --border: #222226;
+  --text: #c8c8cc; --muted: #555560;
+  --amber: #d97706; --amber-dim: #78350f;
+  --indigo: #6366f1; --indigo-dim: #312e81;
 }
-
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--bg); color: var(--text);
   font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  font-size: 14px;
-  line-height: 1.85;
+  font-size: 14px; line-height: 1.85;
   padding: 1rem .75rem 6rem;
 }
-
 .wrap { max-width: 680px; margin: 0 auto; }
 
-/* header */
 header { border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; margin-bottom: 2rem; }
 .badge {
   display: inline-block; font-size: 10px; letter-spacing: .1em;
@@ -40,36 +29,24 @@ header { border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; margin
 h1 { font-size: 1.15rem; font-weight: 300; letter-spacing: .04em; color: #e8e8ec; }
 .subtitle { font-size: 11px; color: var(--muted); margin-top: .25rem; }
 
-/* date nav */
-.date-nav {
-  display: flex; gap: .5rem; flex-wrap: wrap;
-  margin-bottom: 2rem;
-}
+.date-nav { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2rem; }
 .date-nav a {
   font-size: 11px; color: var(--muted); text-decoration: none;
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 4px; padding: 3px 10px;
-  letter-spacing: .05em;
+  border-radius: 4px; padding: 3px 10px; letter-spacing: .05em;
 }
-.date-nav a:active { color: var(--text); }
 
-/* date group */
 .date-group { margin-bottom: 2.5rem; }
 .date-heading {
-  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: .12em;
   color: var(--muted); border-bottom: 1px solid var(--border);
   padding-bottom: .4rem; margin-bottom: 1rem;
 }
 
-/* slot card */
 .slot-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem; margin-bottom: 1rem;
 }
-
 .slot-header {
   display: flex; justify-content: space-between; align-items: flex-start;
   margin-bottom: .85rem; flex-wrap: wrap; gap: .4rem;
@@ -82,110 +59,88 @@ h1 { font-size: 1.15rem; font-weight: 300; letter-spacing: .04em; color: #e8e8ec
 }
 .slot-badge.x       { background: #1e1b4b; color: #a5b4fc; }
 .slot-badge.threads { background: #1c0f00; color: #fbbf24; }
-.slot-params { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: .4rem; }
-.quality-tag {
-  font-size: 10px; background: #1a1a1e; border: 1px solid var(--border);
-  color: var(--muted); border-radius: 3px; padding: 1px 6px;
-}
+.slot-params { font-size: 11px; color: var(--muted); }
 
-/* thinking */
 .thinking {
-  opacity: .3;
-  font-style: italic;
-  font-size: 11px;
-  color: var(--text);
-  border-left: 2px solid #2a2a30;
-  padding-left: .75rem;
-  margin-bottom: .85rem;
-  user-select: none;
-  pointer-events: none;
-  white-space: pre-wrap;
-  line-height: 1.7;
+  opacity: .3; font-style: italic; font-size: 11px;
+  color: var(--text); border-left: 2px solid #2a2a30;
+  padding-left: .75rem; margin-bottom: .85rem;
+  user-select: none; pointer-events: none;
+  white-space: pre-wrap; line-height: 1.7;
 }
 
-/* block */
 .block-wrap {
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  overflow: hidden;
-  margin-bottom: .65rem;
+  border: 1px solid var(--border); border-radius: 7px;
+  overflow: hidden; margin-bottom: .65rem;
 }
 .block-wrap.meigen  { border-color: var(--indigo-dim); }
 .block-wrap.omamori { border-color: var(--amber-dim); }
 
 .block-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: .3rem .7rem;
-  background: #0f0f12;
+  padding: .3rem .7rem; background: #0f0f12;
   border-bottom: 1px solid var(--border);
 }
 .block-label { font-size: 10px; color: var(--muted); letter-spacing: .08em; }
-.quality-out { font-size: 10px; color: var(--muted); margin-left: .3rem; }
 
 .copy-btn {
-  font-size: 10px;
-  background: #1a1a1e;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  border-radius: 3px;
-  padding: 3px 10px;
-  cursor: pointer;
+  font-size: 10px; background: #1a1a1e;
+  border: 1px solid var(--border); color: var(--muted);
+  border-radius: 3px; padding: 3px 10px; cursor: pointer;
   transition: color .15s, border-color .15s;
   -webkit-tap-highlight-color: transparent;
 }
-.copy-btn:active, .copy-btn.copied { color: #4ade80; border-color: #16a34a; }
+.copy-btn.copied { color: #4ade80; border-color: #16a34a; }
 
 .block-body {
-  padding: .75rem;
-  font-size: 13px;
-  color: #a8a8b8;
-  white-space: pre-wrap;
-  line-height: 1.85;
+  padding: .75rem; font-size: 13px; color: #a8a8b8;
+  white-space: pre-wrap; line-height: 1.85;
 }
 .block-body.meigen {
-  font-family: monospace;
-  letter-spacing: .04em;
-  color: #a5b4fc;
-  font-size: 14px;
+  font-family: monospace; letter-spacing: .04em;
+  color: #a5b4fc; font-size: 14px;
 }
 .block-body.omamori {
   font-family: 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
-  color: #fcd34d;
-  font-size: 14px;
+  color: #fcd34d; font-size: 14px;
 }
 
-/* char name */
+/* キャラクター名 */
 .char-name {
-  display: block;
-  font-size: 12px;
-  color: var(--amber);
-  padding: .55rem .7rem .1rem;
-  user-select: none;
+  display: block; font-size: 12px; font-weight: 500;
+  padding: .55rem .75rem .1rem;
+  user-select: none; letter-spacing: .05em;
 }
+.char-name.shizuku   { color: #7dd3fc; }   /* 青白・冷たい */
+.char-name.shiratama { color: #d4d4d8; }   /* 白・軽やか */
+.char-name.hiyori    { color: #fbbf24; }   /* 琥珀・温もり */
 
-/* footer */
 footer {
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
-  margin-top: 3rem;
-  font-size: 11px;
-  color: #333338;
+  border-top: 1px solid var(--border); padding-top: 1.5rem;
+  margin-top: 3rem; font-size: 11px; color: #333338;
 }
-
-/* back-to-top */
 .totop {
-  position: fixed;
-  bottom: 1.25rem; right: 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 18px;
-  border-radius: 50%;
+  position: fixed; bottom: 1.25rem; right: 1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--muted); font-size: 18px; border-radius: 50%;
   width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
+  text-decoration: none; -webkit-tap-highlight-color: transparent;
 }
+
+/* 凡例 */
+.legend {
+  display: flex; gap: .75rem; flex-wrap: wrap;
+  margin-bottom: 1.5rem; font-size: 11px;
+}
+.legend-item { display: flex; align-items: center; gap: .35rem; color: var(--muted); }
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-dot.shizuku   { background: #7dd3fc; }
+.legend-dot.shiratama { background: #d4d4d8; }
+.legend-dot.hiyori    { background: #fbbf24; }
 </style>
 </head>
 <body>
@@ -206,20 +161,22 @@ footer {
   <a href="#date-418">4/18</a>
 </nav>
 
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot shizuku"></span>しずく — 静かで少し冷たい</div>
+  <div class="legend-item"><span class="legend-dot shiratama"></span>しらたま — 軽やかで芯がある</div>
+  <div class="legend-item"><span class="legend-dot hiyori"></span>ひより — 温もりのある確信</div>
+</div>
+
 <div class="date-group" id="date-413">
   <h2 class="date-heading">4月13日（日）</h2>
-  
-  <div class="slot-card" id="slot-1">
+    <div class="slot-card" id="slot-1">
     <div class="slot-header">
       <div class="slot-meta">
         <span class="slot-num">01</span>
         <span class="slot-time">06:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 10 / 泥臭さ 8
-        <span class="quality-tag">冷徹寄り</span>
-      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 8</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度10・泥臭さ8という配分に従い、感情的な励ましを一切排除する。「調律師」としての静けさを、直接的な批判ではなく「構造の観察者」として滲ませた。余韻の本音は少し間抜けな方向にズラし、締まりすぎない呼吸を残す。</div>
@@ -256,11 +213,10 @@ footer {
 我ながら、これに気づくのが遅すぎた。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">冷徹寄り</span>
         <button class="copy-btn" data-text="床を直せ、人を疑うな💎">コピー</button>
       </div>
       <div class="block-body meigen">床を直せ、人を疑うな💎</div>
@@ -275,10 +231,7 @@ footer {
         <span class="slot-time">07:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 3
-        
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 3</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「疲れを隠してきた自分への静かな反論」として滲ませた。前回の構文「床を直せ、人を疑うな💎」は動詞2連打の命令形だったので、今回のお守り言葉は断言1本に絞り、余韻だけ残す構文に変えた。質はしずくを選択。冷たい静けさで断ち切り、解釈を渡す。</div>
@@ -319,9 +272,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="離れることも、愛のかたちだ。💍">コピー</button>
@@ -336,10 +288,7 @@ footer {
         <span class="slot-time">10:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 8 / 泥臭さ 0
-        
-      </div>
+      <div class="slot-params">冷徹 8 / 泥臭さ 0</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度8/10に従い、感情を抑えた乾いた温度感を選んだ。パンクさは「関係を守ろうとすること自体が、もう終わりの始まりかもしれない」という行儀の悪い本音1箇所に静かに滲ませた。お守り言葉はしずく質感を選択。前回「離れることも、愛のかたちだ」という〈行為＋も＋名詞＋だ〉構文を避け、状態の断言で閉じる形に変えた。</div>
@@ -376,9 +325,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="合わない人と無理に合わせた時間は、戻ってこない。💍">コピー</button>
@@ -393,10 +341,7 @@ footer {
         <span class="slot-time">19:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 4 / 泥臭さ 5
-        
-      </div>
+      <div class="slot-params">冷徹 4 / 泥臭さ 5</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「距離を置くことへの後ろめたさ」への静かな反論として滲ませた。お守り言葉はしらたまを選択——軽く転がしながら、芯だけ残す。前回は「合わない人」への言及だったので、今回は「自分の疲れ方」の観察に軸を移し、構文パターンも断言型から流しで終わる型に変えた。</div>
@@ -437,9 +382,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しらたま</span>
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="疲れ方を知っている人は、自分の方角を知っている。💍">コピー</button>
@@ -454,10 +398,7 @@ footer {
         <span class="slot-time">22:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 2 / 泥臭さ 9
-        <span class="quality-tag">泥臭さ寄り</span>
-      </div>
+      <div class="slot-params">冷徹 2 / 泥臭さ 9</div>
     </div>
 
     <div class="thinking" aria-hidden="true">泥臭さ9/10なので、綺麗な「構造論」に着地させず、現場の体温を前面に出した。前回は「疲れ方」という状態語を軸にした構文だったため、今回は「行為の失敗」を起点に置いた。調律師らしさは「整える」ではなく「ずれを放置していた自覚」として滲ませた。</div>
@@ -502,11 +443,10 @@ footer {
 我ながら、あのカウンターの配置、今も少しだけ後悔してる</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">泥臭さ寄り</span>
         <button class="copy-btn" data-text="居場所は本人より先に消える💎">コピー</button>
       </div>
       <div class="block-body meigen">居場所は本人より先に消える💎</div>
@@ -517,18 +457,14 @@ footer {
 </div>
 <div class="date-group" id="date-414">
   <h2 class="date-heading">4月14日（月）</h2>
-  
-  <div class="slot-card" id="slot-6">
+    <div class="slot-card" id="slot-6">
     <div class="slot-header">
       <div class="slot-meta">
         <span class="slot-num">06</span>
         <span class="slot-time">06:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 5 / 泥臭さ 1
-        <span class="quality-tag">バランス型</span>
-      </div>
+      <div class="slot-params">冷徹 5 / 泥臭さ 1</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度5・泥臭さ1の配分なので、泥臭い現場エピソードより「静かに観察している人間」の視点を優先した。前回パターン「居場所は本人より先に消える」は&quot;喪失&quot;構文だったので、今回は&quot;見えていない&quot;構文に切り替え。調律師感は説教を省いて、診断のような静けさで滲ませた。</div>
@@ -565,11 +501,10 @@ footer {
 大丈夫です、って言わせたのはこっちかもしれない</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name hiyori">ひより</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">バランス型</span>
         <button class="copy-btn" data-text="聞いた気になっている💎">コピー</button>
       </div>
       <div class="block-body meigen">聞いた気になっている💎</div>
@@ -584,10 +519,7 @@ footer {
         <span class="slot-time">07:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 4 / 泥臭さ 8
-        
-      </div>
+      <div class="slot-params">冷徹 4 / 泥臭さ 8</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「関係を続けることが必ずしも誠実ではない」という逆説にそっと滲ませた。お守り言葉はしらたまを選択——断言ではなく、少し転がしてそのまま置く質感。前回の「聞いた気になっている💎」構文（断言＋皮肉の落とし）との差分として、今回は着地せずに流す形で終わらせた。</div>
@@ -632,9 +564,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しらたま</span>
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="繋がり続けることより、繋がり方を選ぶほうが、たぶん誠実だった。💍">コピー</button>
@@ -649,10 +580,7 @@ footer {
         <span class="slot-time">10:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 4
-        
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 4</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度9を軸に、「距離を詰めてくる人への疲れ」という静かな現場感を選んだ。パンクさは「好意を断るのが下手な自分」への自嘲として1滴だけ滲ませた。前回は「繋がり方を選ぶ」という選択の話だったので、今回は「選ばないことへの静かな肯定」にずらした。お守り言葉はしずくで断ち切る。</div>
@@ -695,9 +623,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="期待されるほど、静かになっていった。💍">コピー</button>
@@ -712,10 +639,7 @@ footer {
         <span class="slot-time">19:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 2 / 泥臭さ 6
-        
-      </div>
+      <div class="slot-params">冷徹 2 / 泥臭さ 6</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「人間味1滴」の部分で、整えようとする行為への静かな懐疑として滲ませた。お守り言葉はしらたまを選択——断言でも包みでもなく、少し転がしてそのまま流す質感で。前回構文（期待されるほど、静かになっていった）は「状況→内部変化」の対比構造だったので、今回は状態だけを置いて対比を作らない形にした。</div>
@@ -752,9 +676,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しらたま</span>
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="離れていることが、ときどき一番の誠実だった。💍">コピー</button>
@@ -769,10 +692,7 @@ footer {
         <span class="slot-time">22:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 0
-        <span class="quality-tag">冷徹寄り</span>
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 0</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度9、泥臭さ0の今日。感傷を削ぎ落とし、構造の話だけをする。前回は「離れていること」という関係の文脈。今回は「設計の問題」を純粋に解剖する角度で入る。感触語の連打を避け、説明を足したい衝動を手放す呼吸で。</div>
@@ -813,11 +733,10 @@ footer {
 今も確信はないけど。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">冷徹寄り</span>
         <button class="copy-btn" data-text="怠慢より、設計を疑え💎">コピー</button>
       </div>
       <div class="block-body meigen">怠慢より、設計を疑え💎</div>
@@ -828,18 +747,14 @@ footer {
 </div>
 <div class="date-group" id="date-415">
   <h2 class="date-heading">4月15日（火）</h2>
-  
-  <div class="slot-card" id="slot-11">
+    <div class="slot-card" id="slot-11">
     <div class="slot-header">
       <div class="slot-meta">
         <span class="slot-num">11</span>
         <span class="slot-time">06:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 3 / 泥臭さ 4
-        <span class="quality-tag">バランス型</span>
-      </div>
+      <div class="slot-params">冷徹 3 / 泥臭さ 4</div>
     </div>
 
     <div class="thinking" aria-hidden="true">初回投稿のため前回パターンなし。冷徹度3・泥臭さ4の配分は「静かに観察している人間」の呼吸に近い。調律師らしさは「診断」でなく「気づいたらそうなってた」という遅れた自覚として滲ませた。整えすぎず、途中で少し失速する息継ぎを意識した。</div>
@@ -874,11 +789,10 @@ footer {
 なんだか、信頼より先に「動く実績」が必要だったらしい。今も少し、悔しい。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">バランス型</span>
         <button class="copy-btn" data-text="黙るのは不信じゃない💎">コピー</button>
       </div>
       <div class="block-body meigen">黙るのは不信じゃない💎</div>
@@ -893,10 +807,7 @@ footer {
         <span class="slot-time">07:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 4 / 泥臭さ 1
-        
-      </div>
+      <div class="slot-params">冷徹 4 / 泥臭さ 1</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度4・泥臭さ1という設定なので、鋭さより静けさを優先する。パンクさは「距離を置くことへの後ろめたさを感じなくていい」という本音の角度でほんの少し滲ませた。お守り言葉はひより質感で選ぶ。前回パターン「黙るのは不信じゃない💍」が「〜は〜じゃない」の否定構文だったため、今回は肯定側から入る別の軸で組む。</div>
@@ -941,9 +852,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">ひより</span>
+      <span class="char-name hiyori">ひより</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="離れていても、手放していない。💍">コピー</button>
@@ -958,10 +868,7 @@ footer {
         <span class="slot-time">10:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 10 / 泥臭さ 3
-        
-      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 3</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度10を優先し、感傷を削ぎ落とした。パンクさは「疲れを隠す技術」という逆張りの断言に一瞬だけ顔を出させた。お守り言葉はしずく質を選択。前回「離れていても、手放していない」は関係性の持続を示す構文だったため、今回は「状態の断定」で閉じる全く異なる構文にした。</div>
@@ -1002,9 +909,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="隠し続けた分だけ、本音は濃くなっている。💍">コピー</button>
@@ -1019,10 +925,7 @@ footer {
         <span class="slot-time">19:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 2
-        
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 2</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度9に寄せ、温度を低く保ちながら「距離感」そのものを主題に据えた。パンクさは「察してほしいと思うのをやめた日」という一文にだけ滲ませた。前回は「隠す→濃くなる」という内部の蓄積構文だったため、今回は「やめる」という外向きの切断構文で差別化。お守り言葉はしずくを選択。断言の後に何も足さない。</div>
@@ -1061,9 +964,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="離れるのが冷たさじゃない日もある。💍">コピー</button>
@@ -1078,10 +980,7 @@ footer {
         <span class="slot-time">22:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 2
-        <span class="quality-tag">冷徹寄り</span>
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 2</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度9/10に従い、感情的な励ましを排除し、構造だけを静かに切る。前回の「離れる＝冷たくない」という情緒的な逆説構文を避け、今回は「当然とされている何か」を無音で解体する方向へ。調律師らしさは「音を足す人」ではなく「余分な音を抜く人」として滲ませる。</div>
@@ -1116,11 +1015,10 @@ footer {
 我ながら、埋めることに慣れすぎた時期があった</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name hiyori">ひより</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">冷徹寄り</span>
         <button class="copy-btn" data-text="穴を埋めるな、穴を読め💎">コピー</button>
       </div>
       <div class="block-body meigen">穴を埋めるな、穴を読め💎</div>
@@ -1131,18 +1029,14 @@ footer {
 </div>
 <div class="date-group" id="date-416">
   <h2 class="date-heading">4月16日（水）</h2>
-  
-  <div class="slot-card" id="slot-16">
+    <div class="slot-card" id="slot-16">
     <div class="slot-header">
       <div class="slot-meta">
         <span class="slot-num">16</span>
         <span class="slot-time">06:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 7
-        <span class="quality-tag">冷徹寄り</span>
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 7</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度9を前面に。「設計の問題」として切り込む角度を研ぎ澄ます。前回が「穴を読め」系の構造認識パターンだったので、今回は「すでに起きていることの命名」型にズラす。泥臭さは現場エピソードに凝縮させて、本文全体は乾いた空気感を保つ。</div>
@@ -1195,11 +1089,10 @@ footer {
 我ながら、自分もあのころ口頭に頼りすぎていた。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">冷徹寄り</span>
         <button class="copy-btn" data-text="人を疑う前に設計を疑え💎">コピー</button>
       </div>
       <div class="block-body meigen">人を疑う前に設計を疑え💎</div>
@@ -1214,10 +1107,7 @@ footer {
         <span class="slot-time">07:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 10 / 泥臭さ 1
-        
-      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 1</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度10/10の今日は、感情を削いで骨だけ残す呼吸を選んだ。パンクさは「行儀の悪い本音」として中盤に一瞬だけ顔を出す形で滲ませた。前回のお守り言葉は「設計を疑え」という外向きの断言構文だったので、今回は内向きの静止で差をつける。質はしずくを選択——短く断ち切り、余韻だけを残す。</div>
@@ -1254,9 +1144,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="静かな人ほど、言葉より先に動いている💍">コピー</button>
@@ -1271,10 +1160,7 @@ footer {
         <span class="slot-time">10:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 5 / 泥臭さ 2
-        
-      </div>
+      <div class="slot-params">冷徹 5 / 泥臭さ 2</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度5、泥臭さ2の今日は、乾いた静けさを優先した。パンクさは「離れることが愛情だった」という部分にだけ一瞬顔を出させた。お守り言葉の質は「しずく」を選択——前回の「ひより」構文（温かく包む系）との差分を意識し、今回は説明ゼロで断ち切る。前回の構文「静かな人ほど、〜している」という行動描写型を避け、状態の断言型にした。</div>
@@ -1313,9 +1199,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="離れることが、愛情だった時期もある💍">コピー</button>
@@ -1330,10 +1215,7 @@ footer {
         <span class="slot-time">19:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 2 / 泥臭さ 3
-        
-      </div>
+      <div class="slot-params">冷徹 2 / 泥臭さ 3</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「距離を詰める方が正解とは限らない」という静かな反骨として滲ませた。前回のお守り言葉が「離れること＝愛情」という関係性の再定義構文だったため、今回は関係性ではなく「自分の内側の感覚」に軸を移した。質はしらたまを選択——断言より少し転がして、でも芯だけは手放さない温度で。</div>
@@ -1368,9 +1250,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しらたま</span>
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="沈黙も、語っていた。💍">コピー</button>
@@ -1385,10 +1266,7 @@ footer {
         <span class="slot-time">22:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 6 / 泥臭さ 5
-        <span class="quality-tag">バランス型</span>
-      </div>
+      <div class="slot-params">冷徹 6 / 泥臭さ 5</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度6を活かし、「問題は人ではなく設計」という刃を立てた。前回の「沈黙も、語っていた」は体言止め＋余韻型だったので、今回の名言は動詞で終わらせる構文にズラす。調律師らしさは「熱量を抜く」方向で滲ませた。</div>
@@ -1417,11 +1295,10 @@ footer {
 我ながら、気づくのが遅すぎた。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">バランス型</span>
         <button class="copy-btn" data-text="怒る前に、設計が謝れ💎">コピー</button>
       </div>
       <div class="block-body meigen">怒る前に、設計が謝れ💎</div>
@@ -1432,18 +1309,14 @@ footer {
 </div>
 <div class="date-group" id="date-417">
   <h2 class="date-heading">4月17日（木）</h2>
-  
-  <div class="slot-card" id="slot-21">
+    <div class="slot-card" id="slot-21">
     <div class="slot-header">
       <div class="slot-meta">
         <span class="slot-num">21</span>
         <span class="slot-time">06:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 1
-        <span class="quality-tag">冷徹寄り</span>
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 1</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度9/10のため、体温は薄く、感情的な共感は削る。「調律師」らしく、感情ではなく構造の話として切り込む。前回パターンなしなので、エピソードは短く抑え、構造指摘に重心を置く配分にした。余韻で少しだけ崩す。</div>
@@ -1488,11 +1361,10 @@ footer {
 撤退した人間を引き止めようとした日々を、今も少し恥ずかしいと思っている。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name hiyori">ひより</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">冷徹寄り</span>
         <button class="copy-btn" data-text="仕組みが壊れてる、情熱で補うな💎">コピー</button>
       </div>
       <div class="block-body meigen">仕組みが壊れてる、情熱で補うな💎</div>
@@ -1507,10 +1379,7 @@ footer {
         <span class="slot-time">07:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 1 / 泥臭さ 0
-        
-      </div>
+      <div class="slot-params">冷徹 1 / 泥臭さ 0</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度1、泥臭さ0という設定から、今日は静かで少し乾いた温度感を選んだ。パンクさは「大事にされてると思い込んでた」という一行にだけ、ひっそり顔を出す程度に抑えた。前回が「仕組みが壊れてる、情熱で補うな」という構造批判の構文だったので、今回は内側の感覚に寄せた。お守り言葉の質は「しずく」——説明を足さず、断ち切る。</div>
@@ -1551,9 +1420,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="動いたのは自分だけ、という夜がある。💍">コピー</button>
@@ -1568,10 +1436,7 @@ footer {
         <span class="slot-time">10:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 8 / 泥臭さ 6
-        
-      </div>
+      <div class="slot-params">冷徹 8 / 泥臭さ 6</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「逃げた方が正解だった、という記憶」という一文に滲ませた。説明せず置くだけ。お守り言葉はしずく質を選択——断ち切って何も足さない冷たさで着地。前回は「動いたのは自分だけ」という孤独の断言構文だったため、今回は「消えた後の静けさ」という時間軸の構文にずらした。</div>
@@ -1616,9 +1481,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="離れた夜だけが、正直だった。💍">コピー</button>
@@ -1633,10 +1497,7 @@ footer {
         <span class="slot-time">19:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 5 / 泥臭さ 7
-        
-      </div>
+      <div class="slot-params">冷徹 5 / 泥臭さ 7</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「距離を詰めてくる人間への疲れ」という形で一瞬だけ顔を出させた。お守り言葉はしらたまを選択。軽く転がりながら、芯だけ残す。前回（しずく・断ち切り系）との差分として、今回は少し流れるリズムで着地させ、完結させないまま余韻に預けた。</div>
@@ -1675,9 +1536,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="詰めなかった分だけ、残ってた。💍">コピー</button>
@@ -1692,10 +1552,7 @@ footer {
         <span class="slot-time">22:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 4 / 泥臭さ 6
-        <span class="quality-tag">バランス型</span>
-      </div>
+      <div class="slot-params">冷徹 4 / 泥臭さ 6</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度4、泥臭さ6。今日は説教臭さを徹底的に排除し、「格好悪い自分の話」から静かに構造へ滑り込む動線を選んだ。前回の構文「〜した分だけ、〜てた」という因果型を避け、今回は断片的な呼吸感で余白を作る。調律師らしさは「整えようとしない」こと自体に滲ませる。</div>
@@ -1734,11 +1591,10 @@ footer {
 答えが返ってこないとき、むしろほっとしてた自分もいたな、当時</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">バランス型</span>
         <button class="copy-btn" data-text="熱を足す前に、穴を塞げ💎">コピー</button>
       </div>
       <div class="block-body meigen">熱を足す前に、穴を塞げ💎</div>
@@ -1749,18 +1605,14 @@ footer {
 </div>
 <div class="date-group" id="date-418">
   <h2 class="date-heading">4月18日（金）</h2>
-  
-  <div class="slot-card" id="slot-26">
+    <div class="slot-card" id="slot-26">
     <div class="slot-header">
       <div class="slot-meta">
         <span class="slot-num">26</span>
         <span class="slot-time">06:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 3 / 泥臭さ 6
-        <span class="quality-tag">バランス型</span>
-      </div>
+      <div class="slot-params">冷徹 3 / 泥臭さ 6</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度3・泥臭さ6で、今回は「整った指摘」より「ぼんやりした気づき」を優先した。前回構文「熱を足す前に、穴を塞げ」が「行動の順序」を問うものだったので、今回は「存在の認識」側からずらす。調律師らしさは、大声を出さず、微妙なピントのズレを静かに指さす形で滲ませた。</div>
@@ -1797,11 +1649,10 @@ footer {
 我ながら、冷たく聞こえるかもしれない。でも感情で追いかけ続けるより、たぶんずっと優しい。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">バランス型</span>
         <button class="copy-btn" data-text="静かになった時がもう後半戦💎">コピー</button>
       </div>
       <div class="block-body meigen">静かになった時がもう後半戦💎</div>
@@ -1816,10 +1667,7 @@ footer {
         <span class="slot-time">07:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 7 / 泥臭さ 7
-        
-      </div>
+      <div class="slot-params">冷徹 7 / 泥臭さ 7</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「距離を保てる人が冷たいわけじゃない」という静かな反論として滲ませた。お守り言葉はしずく質を選択。断言で断ち切り、説明を加えない。前回「静かになった時がもう後半戦」は状態変化を起点にした構文だったため、今回は「〜じゃない」という否定で開く構文にズラした。</div>
@@ -1858,9 +1706,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="近いから見えないことが、ある。💍">コピー</button>
@@ -1875,10 +1722,7 @@ footer {
         <span class="slot-time">10:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 5 / 泥臭さ 10
-        
-      </div>
+      <div class="slot-params">冷徹 5 / 泥臭さ 10</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「好かれようとしてる自分に気づいたとき、もう終わってる」という行儀の悪い本音1箇所に滲ませた。お守り言葉はしらたまを選択——軽く転がして、でも芯だけ残す質感で。前回「近いから見えない」という距離の構文だったので、今回は「手放す」でも「近さ」でもなく、&quot;見せ方と消耗&quot;の軸にずらした。</div>
@@ -1915,9 +1759,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しらたま</span>
+      <span class="char-name shiratama">しらたま</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="削っても消えないものが、あなたの輪郭だ。💍">コピー</button>
@@ -1932,10 +1775,7 @@ footer {
         <span class="slot-time">19:00</span>
         <span class="slot-badge threads">Threads</span>
       </div>
-      <div class="slot-params">
-        冷徹 9 / 泥臭さ 7
-        
-      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 7</div>
     </div>
 
     <div class="thinking" aria-hidden="true">パンクさは「人間関係の距離を詰めてくる人」への冷えた観察として滲ませた。説教にならないよう、自分ごとのような口調で置いた。お守り言葉はしずく質感を選択。前回が「削っても消えないもの」という喪失軸の構文だったので、今回は「近さ」への静かな反論を軸にした。</div>
@@ -1988,9 +1828,8 @@ footer {
 
     
 
-    
     <div class="block-wrap omamori">
-      <span class="char-name">しずく</span>
+      <span class="char-name shizuku">しずく</span>
       <div class="block-header">
         <span class="block-label">お守り言葉</span>
         <button class="copy-btn" data-text="距離は冷たさじゃない。それはあなたが引いた、輪郭だ。💍">コピー</button>
@@ -2005,10 +1844,7 @@ footer {
         <span class="slot-time">22:00</span>
         <span class="slot-badge x">X</span>
       </div>
-      <div class="slot-params">
-        冷徹 10 / 泥臭さ 9
-        <span class="quality-tag">冷徹寄り</span>
-      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 9</div>
     </div>
 
     <div class="thinking" aria-hidden="true">冷徹度10・泥臭さ9で今回は「応援ゼロ」を徹底する。前回の名言が「輪郭」という抽象名詞で締めたので、今回は動詞で終わらせる構文へ変える。調律師らしさは「感情ではなく構造を診る」視点を静かに滲ませる。説明の衝動を切る。</div>
@@ -2045,11 +1881,10 @@ footer {
 でも早く気づいてたら、たぶん違う間違いをしてた。</div>
     </div>
 
-    
     <div class="block-wrap meigen">
+      <span class="char-name hiyori">ひより</span>
       <div class="block-header">
         <span class="block-label">名言</span>
-        <span class="quality-out">冷徹寄り</span>
         <button class="copy-btn" data-text="消耗は、優しさを食べて育つ💎">コピー</button>
       </div>
       <div class="block-body meigen">消耗は、優しさを食べて育つ💎</div>
@@ -2060,11 +1895,8 @@ footer {
 </div>
 
 
-<footer>
-  30枠 · 4月13日〜18日 · 静かな調律師 / 投稿生成スタジオ v4.2
-</footer>
-
-</div><!-- /.wrap -->
+<footer>30枠 · 4月13日〜18日 · 静かな調律師 / 投稿生成スタジオ v4.2</footer>
+</div>
 
 <a href="#" class="totop" aria-label="トップへ">↑</a>
 
@@ -2072,27 +1904,24 @@ footer {
 document.querySelectorAll('.copy-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const text = btn.dataset.text;
-    navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'コピー済';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'コピー';
-        btn.classList.remove('copied');
-      }, 1800);
-    }).catch(() => {
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
+    const finish = () => {
       btn.textContent = 'コピー済';
       btn.classList.add('copied');
       setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1800);
-    });
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(finish).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta); finish();
+      });
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta); finish();
+    }
   });
 });
 </script>
