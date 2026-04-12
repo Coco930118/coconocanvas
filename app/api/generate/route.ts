@@ -1,6 +1,11 @@
 import { NextRequest } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { GenerateRequest, GenerateResultData } from '@/lib/types';
+
+// Use egress proxy if available (required in sandboxed environments)
+const proxyUrl = process.env.GLOBAL_AGENT_HTTP_PROXY ?? process.env.https_proxy ?? process.env.HTTPS_PROXY;
+const httpAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : undefined;
 
 export const maxDuration = 60;
 
@@ -230,7 +235,8 @@ async function stage2(
   trendSummary: string,
   patternIndex?: number,
 ): Promise<string> {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  // ANTHROPIC_AUTH_TOKEN (Bearer) takes priority over ANTHROPIC_API_KEY (X-Api-Key)
+  const client = new Anthropic({ httpAgent });
 
   const systemPrompt = buildSystemPrompt(
     platform,
