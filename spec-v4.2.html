@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>静かな調律師 / 投稿生成スタジオ — spec v4.2</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0d0d0f;
+    --surface:  #141416;
+    --border:   #222226;
+    --text:     #c8c8cc;
+    --muted:    #555560;
+    --amber:    #d97706;
+    --amber-dim:#78350f;
+    --indigo:   #6366f1;
+    --indigo-dim:#312e81;
+    --green:    #16a34a;
+    --red:      #dc2626;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    padding: 2rem 1rem 6rem;
+  }
+
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  /* ── header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: .1em;
+    background: var(--amber-dim);
+    color: var(--amber);
+    border: 1px solid var(--amber);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: .05em;
+    color: #e8e8ec;
+    margin-bottom: .4rem;
+  }
+  .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  /* ── sections ── */
+  section { margin-bottom: 3.5rem; }
+  h2 {
+    font-size: 11px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .5rem;
+    margin-bottom: 1.5rem;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #d4d4d8;
+    margin: 1.5rem 0 .75rem;
+  }
+  h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin: 1rem 0 .4rem;
+    letter-spacing: .05em;
+  }
+  p { color: var(--text); margin-bottom: .75rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: .75rem; }
+  li { margin-bottom: .3rem; color: var(--text); }
+
+  /* ── note / warn boxes ── */
+  .note {
+    background: var(--surface);
+    border-left: 3px solid var(--indigo);
+    border-radius: 0 4px 4px 0;
+    padding: .75rem 1rem;
+    margin: 1rem 0;
+    font-size: 13px;
+    color: #a8a8b8;
+  }
+  .warn {
+    background: #1a1208;
+    border-left: 3px solid var(--amber);
+    border-radius: 0 4px 4px 0;
+    padding: .75rem 1rem;
+    margin: 1rem 0;
+    font-size: 13px;
+    color: #c8a050;
+  }
+
+  /* ── code ── */
+  code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    background: #1c1c20;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 6px;
+    color: #a8d8b0;
+  }
+  pre {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    background: #111113;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    line-height: 1.7;
+    color: #b0c0b0;
+    margin: .75rem 0 1.25rem;
+  }
+  pre .c  { color: #555560; }   /* comment */
+  pre .k  { color: #818cf8; }   /* keyword */
+  pre .s  { color: #86efac; }   /* string */
+  pre .n  { color: #fcd34d; }   /* section name */
+  pre .t  { color: #f9a8d4; }   /* tag */
+
+  /* ── table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: .75rem 0 1.25rem;
+    font-size: 13px;
+  }
+  th {
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding: .5rem .75rem;
+  }
+  td {
+    border-bottom: 1px solid #1a1a1e;
+    padding: .55rem .75rem;
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  .tag-x       { color: var(--indigo); }
+  .tag-threads { color: var(--amber);  }
+
+  /* ── slot grid ── */
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: .6rem;
+    margin: 1rem 0;
+  }
+  .slot-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .6rem .85rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: 12px;
+  }
+  .slot-card.x       { border-color: var(--indigo-dim); }
+  .slot-card.threads { border-color: var(--amber-dim);  }
+  .slot-num {
+    font-family: monospace;
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 1.4rem;
+  }
+  .slot-label { flex: 1; color: #d4d4d8; }
+  .slot-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: .05em;
+  }
+  .slot-badge.x       { background: #1e1b4b; color: #a5b4fc; }
+  .slot-badge.threads { background: #1c0f00; color: #fbbf24; }
+
+  /* ── diff-from-v41 marker ── */
+  .new-in-v42 {
+    display: inline-block;
+    font-size: 10px;
+    background: #0a1f0a;
+    border: 1px solid #1a4a1a;
+    color: #4ade80;
+    border-radius: 3px;
+    padding: 0 5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- HEADER                                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<header>
+  <div class="badge">SPEC v4.2 — FINAL</div>
+  <h1>静かな調律師 / 投稿生成スタジオ</h1>
+  <p class="subtitle">Next.js 14 · Anthropic claude-sonnet-4-6 · Tavily Search · Vercel Serverless</p>
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- 1. バッチスケジュール仕様（April 13–15 サンプル：15枠）               -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<section id="batch-schedule">
+  <h2>01 · バッチスケジュール仕様</h2>
+
+  <p>
+    バッチ生成は「期間指定」で動く。
+    期間を渡すと、内部で決まった時間帯に投稿枠を自動展開する。
+    1日5枠、最大30枠まで。
+  </p>
+
+  <h3>標準時刻テンプレート</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>プラットフォーム</th>
+        <th>時刻</th>
+        <th>狙い</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag-x">X</span></td>
+        <td><code>06:00</code></td>
+        <td>通勤前。冷静な朝の頭に刺さる一撃</td>
+      </tr>
+      <tr>
+        <td><span class="tag-threads">Threads</span></td>
+        <td><code>07:00</code></td>
+        <td>起き抜け。まだ言語化されていない感覚に寄り添う</td>
+      </tr>
+      <tr>
+        <td><span class="tag-threads">Threads</span></td>
+        <td><code>10:00</code></td>
+        <td>午前の隙間。ちょっとした共感を置いておく</td>
+      </tr>
+      <tr>
+        <td><span class="tag-threads">Threads</span></td>
+        <td><code>19:00</code></td>
+        <td>夕方の疲れどき。静かに届く言葉</td>
+      </tr>
+      <tr>
+        <td><span class="tag-x">X</span></td>
+        <td><code>22:00</code></td>
+        <td>夜。組織の問題を一人で抱えている人の画面に滑り込む</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    1日5枠 × 6日 = 30枠が上限。超えた場合は自動トリム（末尾を切る）してから警告を出す。
+  </div>
+
+  <h3>サンプル：4月13日 06:00 〜 4月15日 22:00（15枠）</h3>
+  <p>
+    3日間 × 5枠 = ちょうど15枠。
+    バッチパーサーは開始・終了時刻を含む形で枠を展開する。
+  </p>
+
+  <div class="slot-grid">
+
+    <!-- Day 1 -->
+    <div class="slot-card x">
+      <span class="slot-num">01</span>
+      <span class="slot-label">4/13 06:00</span>
+      <span class="slot-badge x">X</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">02</span>
+      <span class="slot-label">4/13 07:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">03</span>
+      <span class="slot-label">4/13 10:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">04</span>
+      <span class="slot-label">4/13 19:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card x">
+      <span class="slot-num">05</span>
+      <span class="slot-label">4/13 22:00</span>
+      <span class="slot-badge x">X</span>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="slot-card x">
+      <span class="slot-num">06</span>
+      <span class="slot-label">4/14 06:00</span>
+      <span class="slot-badge x">X</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">07</span>
+      <span class="slot-label">4/14 07:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">08</span>
+      <span class="slot-label">4/14 10:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">09</span>
+      <span class="slot-label">4/14 19:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card x">
+      <span class="slot-num">10</span>
+      <span class="slot-label">4/14 22:00</span>
+      <span class="slot-badge x">X</span>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="slot-card x">
+      <span class="slot-num">11</span>
+      <span class="slot-label">4/15 06:00</span>
+      <span class="slot-badge x">X</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">12</span>
+      <span class="slot-label">4/15 07:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">13</span>
+      <span class="slot-label">4/15 10:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card threads">
+      <span class="slot-num">14</span>
+      <span class="slot-label">4/15 19:00</span>
+      <span class="slot-badge threads">Threads</span>
+    </div>
+    <div class="slot-card x">
+      <span class="slot-num">15</span>
+      <span class="slot-label">4/15 22:00</span>
+      <span class="slot-badge x">X</span>
+    </div>
+
+  </div><!-- /.slot-grid -->
+
+  <h3>期間入力フォーマット（受け付けるすべての形式）</h3>
+  <table>
+    <thead>
+      <tr><th>形式</th><th>例</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>日本語</td>
+        <td><code>4月13日 06:00 〜 4月15日 22:00</code></td>
+      </tr>
+      <tr>
+        <td>スラッシュ</td>
+        <td><code>2026/4/13 6:00 〜 2026/4/15 22:00</code></td>
+      </tr>
+      <tr>
+        <td>ISO（ハイフン）</td>
+        <td><code>2026-04-13 06:00 〜 2026-04-15 22:00</code></td>
+      </tr>
+      <tr>
+        <td>矢印セパレータ</td>
+        <td><code>4/13 6:00 → 4/15 22:00</code></td>
+      </tr>
+      <tr>
+        <td>から〜まで</td>
+        <td><code>4月13日6時から4月15日22時まで</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>パーサー注意点：</strong>
+    ISO形式の日付ハイフン（<code>2026-04-13</code>）は日付区切りとして扱う。
+    セパレータとして機能するのは「スペース + ハイフン + スペース」形式（<code> - </code>）のみ。
+    それ以外のハイフンは絶対に変換しない。
+  </div>
+
+  <h3>警告ケース一覧</h3>
+  <table>
+    <thead>
+      <tr><th>プレフィックス</th><th>条件</th><th>UI挙動</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>OVER_LIMIT:</code></td>
+        <td>30枠超</td>
+        <td>末尾トリム後に警告表示、確定ボタンで続行</td>
+      </tr>
+      <tr>
+        <td><code>PAST_DATE:</code></td>
+        <td>開始が過去日時</td>
+        <td>「このまま生成」ボタン＋キャンセルを表示</td>
+      </tr>
+      <tr>
+        <td><code>YEAR_CROSS:</code></td>
+        <td>年をまたぐ</td>
+        <td>年表示付きで確認バナーを出す</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>エラーケース（パース失敗）</h3>
+  <ul>
+    <li><strong>空白</strong>：入力が空のまま確定 → 「期間を入力してください」</li>
+    <li><strong>不明瞭</strong>：日時が読み取れない → 「日時の読み取りに失敗しました」</li>
+    <li><strong>終了 &lt; 開始</strong>：終了が開始より前 → 「終了日時が開始より前です」</li>
+  </ul>
+
+</section>
+<!-- ／ section#batch-schedule -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- （続きは次のセクションへ）                                             -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- 次：02 · キャラクター定義 / 強弱スペクトラム -->
+
+</div><!-- /.wrap -->
+</body>
+</html>

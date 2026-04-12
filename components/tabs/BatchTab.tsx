@@ -107,54 +107,68 @@ function SlotCard({ sr }: { sr: SlotResult }) {
       {/* Trend */}
       {data && <TrendSummary summary={data.trendSummary} query={data.query} />}
 
-      {/* X result */}
+      {/* X result — 3 independent blocks */}
       {isX && parsedX?.success && (
         <>
-          <div className="opacity-40 text-xs italic select-none pointer-events-none leading-relaxed">
+          {/* Character thought */}
+          <div className="opacity-40 text-xs italic select-none pointer-events-none leading-relaxed border-l border-zinc-800 pl-2">
             {parsedX.thinking}
           </div>
+          {/* Body block */}
           <div className="relative bg-zinc-900/50 border border-zinc-800 rounded p-3">
             <div className="absolute top-2 right-2">
-              <CopyButton text={parsedX.body} />
+              <CopyButton text={parsedX.body} label="本文コピー" />
             </div>
-            <pre className="whitespace-pre-wrap text-xs text-zinc-300 leading-loose font-sans pr-16">
+            <pre className="whitespace-pre-wrap text-xs text-zinc-300 leading-loose font-sans pr-20">
               {parsedX.body}
             </pre>
           </div>
-          <div className="relative bg-indigo-950 border border-indigo-700 rounded-none p-3 font-mono">
-            <div className="absolute top-2 right-2">
-              <CopyButton text={parsedX.meigen} />
+          {/* Meigen block */}
+          <div>
+            <div className="flex items-center gap-1.5 mb-1 select-none">
+              <span className="text-xs text-indigo-600">一撃の名言</span>
+              <span className="text-xs text-indigo-800">{data && getXQuality(data.coldness, data.rawness)}</span>
             </div>
-            <p className="text-xs text-indigo-700 select-none mb-1">
-              💎 {data && getXQuality(data.coldness, data.rawness)}
-            </p>
-            <p className="text-indigo-200 text-xs tracking-wider pr-16">{parsedX.meigen}</p>
+            <div className="relative bg-indigo-950 border border-indigo-700 rounded-none p-3 font-mono">
+              <div className="absolute top-2 right-2">
+                <CopyButton text={parsedX.meigen} label="名言コピー" />
+              </div>
+              <p className="text-indigo-200 text-xs tracking-wider pr-20">{parsedX.meigen}</p>
+            </div>
           </div>
         </>
       )}
 
-      {/* Threads result */}
+      {/* Threads result — 3 independent blocks */}
       {!isX && parsedT?.success && (
         <>
-          <div className="opacity-40 text-xs italic select-none pointer-events-none leading-relaxed">
+          {/* Character thought */}
+          <div className="opacity-40 text-xs italic select-none pointer-events-none leading-relaxed border-l border-zinc-800 pl-2">
             {parsedT.thinking}
           </div>
+          {/* Body block */}
           <div className="relative bg-zinc-900/50 border border-zinc-800 rounded-2xl p-3">
             <div className="absolute top-2 right-2">
-              <CopyButton text={parsedT.body} />
+              <CopyButton text={parsedT.body} label="本文コピー" />
             </div>
-            <pre className="whitespace-pre-wrap text-xs text-zinc-300 leading-loose font-sans pr-16">
+            <pre className="whitespace-pre-wrap text-xs text-zinc-300 leading-loose font-sans pr-20">
               {parsedT.body}
             </pre>
           </div>
-          <div className="relative bg-amber-950 border border-amber-700 rounded-2xl p-3 font-serif">
-            <div className="absolute top-2 right-2">
-              <CopyButton text={parsedT.omamori} />
+          {/* Omamori block — character name outside, copy copies text only */}
+          <div>
+            <div className="flex items-center gap-1.5 mb-1 select-none">
+              <span className="text-xs text-amber-600">お守り言葉</span>
+              <span className="text-xs text-amber-500 font-medium">
+                {getThreadsQuality(parsedT.thinking).replace(/[（）]/g, '')}
+              </span>
             </div>
-            <p className="text-xs text-amber-700 select-none mb-1">
-              💍 {getThreadsQuality(parsedT.thinking)}
-            </p>
-            <p className="text-amber-200 text-xs pr-16">{parsedT.omamori}</p>
+            <div className="relative bg-amber-950 border border-amber-700 rounded-2xl p-3 font-serif">
+              <div className="absolute top-2 right-2">
+                <CopyButton text={parsedT.omamori} label="お守り言葉コピー" />
+              </div>
+              <p className="text-amber-200 text-xs pr-20">{parsedT.omamori}</p>
+            </div>
           </div>
         </>
       )}

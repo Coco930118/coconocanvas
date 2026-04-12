@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useGenerate } from '@/hooks/useGenerate';
 import { parseXResponse, getXQuality } from '@/lib/parseResponse';
 import { addToHistory, addToFavorites } from '@/lib/localStorage';
-import { CopyButton } from '@/components/ui/CopyButton';
+import { OutputBlock } from '@/components/ui/OutputBlock';
 import { LoadingDots } from '@/components/ui/LoadingDots';
 import { CharCount } from '@/components/ui/CharCount';
 import { TrendSummary } from '@/components/ui/TrendSummary';
 import { ParseErrorDisplay } from '@/components/ui/ParseErrorDisplay';
 
-// Single "tone" slider: 0 = max cold, 10 = max raw
+// slider: 0 = max cold, 10 = max raw
 function toneToScores(tone: number) {
   return { coldness: 10 - tone, rawness: tone };
 }
@@ -30,7 +30,6 @@ export function XTab() {
     if (cooldown || isLoading) return;
     setCooldown(true);
     setTimeout(() => setCooldown(false), 5000);
-
     const { coldness, rawness } = toneToScores(tone);
     await generate({
       platform: 'x',
@@ -39,16 +38,6 @@ export function XTab() {
       manualColdness: isManual ? coldness : undefined,
       manualRawness: isManual ? rawness : undefined,
     });
-  };
-
-  const handleSlider = (v: number) => {
-    setTone(v);
-    setIsManual(true);
-  };
-
-  const handleReset = () => {
-    setTone(5);
-    setIsManual(false);
   };
 
   const handleFavorite = () => {
@@ -74,7 +63,7 @@ export function XTab() {
 
   return (
     <div className="space-y-6">
-      {/* ── Input ────────────────────────────────────────────────────────── */}
+      {/* ── Input ───────────────────────────────────────────────────────────── */}
       <div className="space-y-4">
         <div>
           <label className="block text-xs text-zinc-500 mb-1.5">ヒント（任意）</label>
@@ -86,27 +75,23 @@ export function XTab() {
           />
         </div>
 
-        {/* Tone slider */}
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="text-xs text-zinc-500">トーン調整</label>
             {isManual && (
               <button
-                onClick={handleReset}
+                onClick={() => { setTone(5); setIsManual(false); }}
                 className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
               >
-                リセット（中央に戻す）
+                リセット
               </button>
             )}
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-zinc-600 whitespace-nowrap">冷徹寄り</span>
             <input
-              type="range"
-              min={0}
-              max={10}
-              value={tone}
-              onChange={e => handleSlider(Number(e.target.value))}
+              type="range" min={0} max={10} value={tone}
+              onChange={e => { setTone(Number(e.target.value)); setIsManual(true); }}
               className="flex-1 accent-indigo-500 cursor-pointer"
             />
             <span className="text-xs text-zinc-600 whitespace-nowrap">泥臭さ寄り</span>
@@ -114,12 +99,12 @@ export function XTab() {
           <p className="text-xs text-zinc-700 mt-1">
             {isManual
               ? `冷徹 ${coldness}/10 ・ 泥臭さ ${rawness}/10（手動）`
-              : 'サーバー側でランダム生成（スライダー操作で手動切替）'}
+              : 'スライダー操作で手動切替（デフォルトはサーバー側ランダム）'}
           </p>
         </div>
       </div>
 
-      {/* ── Generate button ───────────────────────────────────────────────── */}
+      {/* ── Generate button ─────────────────────────────────────────────────── */}
       <button
         onClick={handleGenerate}
         disabled={cooldown || isLoading}
@@ -128,57 +113,55 @@ export function XTab() {
         {isLoading ? '生成中…' : '投稿を生成'}
       </button>
 
-      {/* ── Loading state ─────────────────────────────────────────────────── */}
       {isLoading && <LoadingDots message={state.statusMessage} color="indigo" />}
 
-      {/* ── Error state ───────────────────────────────────────────────────── */}
       {state.status === 'error' && (
         <div className="p-4 bg-red-950/40 border border-red-900/60 rounded text-sm text-red-400">
           {state.error}
-          <button onClick={handleGenerate} className="ml-3 text-xs underline opacity-70 hover:opacity-100">
-            再試行
-          </button>
+          <button onClick={handleGenerate} className="ml-3 text-xs underline opacity-70 hover:opacity-100">再試行</button>
         </div>
       )}
 
-      {/* ── Results ───────────────────────────────────────────────────────── */}
+      {/* ── Results ─────────────────────────────────────────────────────────── */}
       {state.status === 'complete' && result && (
-        <div className="space-y-4">
+        <div className="space-y-5">
           <TrendSummary summary={result.trendSummary} query={result.query} />
 
           {parsed?.success ? (
             <>
-              {/* Character thought — display only, no copy */}
+              {/* ① Character thought — display only, never copied */}
               <div
-                className="opacity-40 text-sm italic select-none pointer-events-none leading-relaxed px-1"
+                className="opacity-40 text-sm italic select-none pointer-events-none leading-relaxed border-l border-zinc-800 pl-3"
                 aria-hidden="true"
               >
                 {parsed.thinking}
               </div>
 
-              {/* Body */}
-              <div className="relative bg-zinc-900/60 border border-zinc-800 rounded p-4">
-                <div className="absolute top-3 right-3">
-                  <CopyButton text={parsed.body} />
-                </div>
-                <pre className="whitespace-pre-wrap text-sm text-zinc-200 leading-loose font-sans pr-20">
-                  {parsed.body}
-                </pre>
+              {/* ② Body block */}
+              <div>
+                <OutputBlock
+                  text={parsed.body}
+                  label="本文"
+                  copyLabel="本文コピー"
+                />
                 <CharCount text={parsed.body} platform="x" />
               </div>
 
-              {/* 💎 Meigen card */}
-              <div className="relative bg-indigo-950 border border-indigo-600 rounded-none p-4 font-mono tracking-wider">
-                <div className="absolute top-3 right-3">
-                  <CopyButton text={parsed.meigen} />
-                </div>
-                <p className="text-xs text-indigo-700 select-none mb-1.5">
-                  一撃の名言 —{' '}
-                  <span className="text-indigo-600">
+              {/* ③ Meigen block */}
+              <div>
+                {/* Quality label: display only, outside the block */}
+                <div className="flex items-center gap-2 mb-1.5 select-none">
+                  <span className="text-xs text-indigo-500">一撃の名言</span>
+                  <span className="text-xs text-indigo-800">
                     {getXQuality(result.coldness, result.rawness)}
                   </span>
-                </p>
-                <p className="text-indigo-200 text-sm pr-20">{parsed.meigen}</p>
+                </div>
+                <OutputBlock
+                  text={parsed.meigen}
+                  copyLabel="名言コピー"
+                  blockClassName="bg-indigo-950 border border-indigo-600 rounded-none"
+                  textClassName="text-indigo-200 text-sm font-mono tracking-wider"
+                />
               </div>
 
               {/* Actions */}

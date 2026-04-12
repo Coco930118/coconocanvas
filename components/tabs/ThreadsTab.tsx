@@ -5,7 +5,7 @@ import { useGenerate } from '@/hooks/useGenerate';
 import { parseThreadsResponse, getThreadsQuality } from '@/lib/parseResponse';
 import { addToHistory, addToFavorites } from '@/lib/localStorage';
 import { GenerateResultData } from '@/lib/types';
-import { CopyButton } from '@/components/ui/CopyButton';
+import { OutputBlock } from '@/components/ui/OutputBlock';
 import { LoadingDots } from '@/components/ui/LoadingDots';
 import { CharCount } from '@/components/ui/CharCount';
 import { TrendSummary } from '@/components/ui/TrendSummary';
@@ -25,44 +25,52 @@ function ThreadsCard({
   onRetry: () => void;
 }) {
   const parsed = parseThreadsResponse(result.raw);
-
   if (!parsed.success) return <ParseErrorDisplay raw={parsed.raw} onRetry={onRetry} />;
 
+  // Quality name (しずく / しらたま / ひより) — used for display label only
+  const qualityName = getThreadsQuality(parsed.thinking).replace(/[（）]/g, '');
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {patternLabel && (
         <p className="text-xs text-zinc-600 select-none">{patternLabel}</p>
       )}
 
-      {/* Character thought */}
+      {/* ① Character thought — display only, never copied */}
       <div
-        className="opacity-40 text-sm italic select-none pointer-events-none leading-relaxed px-1"
+        className="opacity-40 text-sm italic select-none pointer-events-none leading-relaxed border-l border-zinc-800 pl-3"
         aria-hidden="true"
       >
         {parsed.thinking}
       </div>
 
-      {/* Body */}
-      <div className="relative bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4">
-        <div className="absolute top-3 right-3">
-          <CopyButton text={parsed.body} />
-        </div>
-        <pre className="whitespace-pre-wrap text-sm text-zinc-200 leading-loose font-sans pr-20">
-          {parsed.body}
-        </pre>
+      {/* ② Body block */}
+      <div>
+        <OutputBlock
+          text={parsed.body}
+          label="本文"
+          copyLabel="本文コピー"
+          blockClassName="bg-zinc-900/60 border border-zinc-800 rounded-2xl"
+        />
         <CharCount text={parsed.body} platform="threads" />
       </div>
 
-      {/* 💍 Omamori card */}
-      <div className="relative bg-amber-950 border border-amber-500 rounded-2xl p-4 font-serif leading-loose">
-        <div className="absolute top-3 right-3">
-          <CopyButton text={parsed.omamori} />
+      {/* ③ Omamori block
+           - Character name displayed ABOVE the block (select-none, not copyable)
+           - Copy button copies ONLY the omamori text (without the character name)
+      */}
+      <div>
+        {/* Character name label — display only, outside the copyable block */}
+        <div className="flex items-center gap-2 mb-1.5 select-none">
+          <span className="text-xs text-amber-600">お守り言葉</span>
+          <span className="text-sm text-amber-500 font-medium">{qualityName}</span>
         </div>
-        <p className="text-xs text-amber-700 select-none mb-1.5">
-          お守り言葉 —{' '}
-          <span className="text-amber-600">{getThreadsQuality(parsed.thinking)}</span>
-        </p>
-        <p className="text-amber-200 text-sm pr-20">{parsed.omamori}</p>
+        <OutputBlock
+          text={parsed.omamori}
+          copyLabel="お守り言葉コピー"
+          blockClassName="bg-amber-950 border border-amber-500 rounded-2xl"
+          textClassName="text-amber-200 text-sm font-serif leading-loose"
+        />
       </div>
 
       {/* Favorite */}
@@ -123,11 +131,10 @@ export function ThreadsTab() {
   };
 
   const is3Pattern = state.results.length >= 3;
-  const showTrend = state.results.length > 0;
 
   return (
     <div className="space-y-6">
-      {/* ── Input ────────────────────────────────────────────────────────── */}
+      {/* ── Input ───────────────────────────────────────────────────────────── */}
       <div>
         <label className="block text-xs text-zinc-500 mb-1.5">ヒント（任意）</label>
         <input
@@ -138,7 +145,7 @@ export function ThreadsTab() {
         />
       </div>
 
-      {/* ── Buttons ──────────────────────────────────────────────────────── */}
+      {/* ── Buttons ─────────────────────────────────────────────────────────── */}
       <div className="flex gap-3 flex-wrap">
         <button
           onClick={handleSingle}
@@ -156,37 +163,24 @@ export function ThreadsTab() {
         </button>
       </div>
 
-      {/* ── Loading ───────────────────────────────────────────────────────── */}
       {isLoading && <LoadingDots message={state.statusMessage} color="amber" />}
 
-      {/* ── Error ────────────────────────────────────────────────────────── */}
       {state.status === 'error' && (
         <div className="p-4 bg-red-950/40 border border-red-900/60 rounded text-sm text-red-400">
           {state.error}
-          <button onClick={handleSingle} className="ml-3 text-xs underline opacity-70 hover:opacity-100">
-            再試行
-          </button>
+          <button onClick={handleSingle} className="ml-3 text-xs underline opacity-70 hover:opacity-100">再試行</button>
         </div>
       )}
 
-      {/* ── Results ───────────────────────────────────────────────────────── */}
+      {/* ── Results ─────────────────────────────────────────────────────────── */}
       {state.status === 'complete' && state.results.length > 0 && (
         <div className="space-y-4">
-          {showTrend && (
-            <TrendSummary
-              summary={state.results[0].trendSummary}
-              query={state.results[0].query}
-            />
-          )}
+          <TrendSummary summary={state.results[0].trendSummary} query={state.results[0].query} />
 
           {is3Pattern ? (
-            // 3 cards side-by-side on md+, stacked on mobile
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {state.results.map((result, i) => (
-                <div
-                  key={i}
-                  className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-4"
-                >
+                <div key={i} className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-4">
                   <ThreadsCard
                     result={result}
                     patternLabel={`パターン ${i + 1} / 3`}
@@ -210,7 +204,6 @@ export function ThreadsTab() {
             />
           )}
 
-          {/* Re-generate row */}
           <div className="flex gap-3 pt-1">
             <button
               onClick={handleSingle}
