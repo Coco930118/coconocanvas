@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>精査リライト — 4/19〜4/21（15投稿）</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0d0d0f;--surface:#141416;--border:#222226;--text:#c8c8cc;--muted:#555560;--amber:#d97706;--amber-dim:#78350f;--indigo:#6366f1;--indigo-dim:#312e81;}
+body{background:var(--bg);color:var(--text);font-family:'Hiragino Sans','Noto Sans JP',sans-serif;font-size:14px;line-height:1.85;padding:1rem .75rem 6rem;}
+.wrap{max-width:680px;margin:0 auto;}
+header{border-bottom:1px solid var(--border);padding-bottom:1.25rem;margin-bottom:2rem;}
+.badge{display:inline-block;font-size:10px;letter-spacing:.1em;background:#1c0f00;color:var(--amber);border:1px solid var(--amber-dim);border-radius:4px;padding:2px 8px;margin-bottom:.75rem;}
+h1{font-size:1.15rem;font-weight:300;letter-spacing:.04em;color:#e8e8ec;}
+.subtitle{font-size:11px;color:var(--muted);margin-top:.25rem;}
+.stats{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.6rem;font-size:11px;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:3px 10px;color:var(--muted);}
+.stat strong{color:#d4d4d8;}
+.date-nav{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.date-nav a{font-size:11px;color:var(--muted);text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:3px 10px;letter-spacing:.05em;}
+.legend{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;font-size:11px;}
+.legend-item{display:flex;align-items:center;gap:.35rem;color:var(--muted);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.legend-dot.shizuku{background:#7dd3fc;}.legend-dot.shiratama{background:#d4d4d8;}.legend-dot.hiyori{background:#fbbf24;}
+.date-group{margin-bottom:2.5rem;}
+.date-heading{font-size:11px;letter-spacing:.12em;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:1rem;}
+.slot-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;}
+.slot-card.is-revised{border-color:#1a3a1a;}
+.slot-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;flex-wrap:wrap;gap:.4rem;}
+.slot-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.slot-num{font-size:11px;color:var(--muted);font-family:monospace;}
+.slot-time{font-size:14px;color:#d4d4d8;font-weight:500;}
+.slot-badge{font-size:10px;padding:2px 7px;border-radius:3px;letter-spacing:.05em;}
+.slot-badge.x{background:#1e1b4b;color:#a5b4fc;}.slot-badge.threads{background:#1c0f00;color:#fbbf24;}
+.morning-badge{font-size:9px;background:#0a2a0a;border:1px solid #2a6a2a;color:#4ade80;border-radius:3px;padding:1px 6px;}
+.rev-badge{font-size:9px;background:#0a1f0a;border:1px solid #2a4a2a;color:#4ade80;border-radius:3px;padding:1px 6px;}
+.ok-badge{font-size:9px;background:#1a1a1e;border:1px solid var(--border);color:var(--muted);border-radius:3px;padding:1px 6px;}
+.slot-params{font-size:11px;color:var(--muted);}
+.rev-note{font-size:11px;color:#4a7a4a;background:#0a140a;border-left:2px solid #2a4a2a;padding:.4rem .6rem;margin-bottom:.7rem;border-radius:0 4px 4px 0;line-height:1.6;}
+.thinking{opacity:.3;font-style:italic;font-size:11px;color:var(--text);border-left:2px solid #2a2a30;padding-left:.75rem;margin-bottom:.85rem;user-select:none;pointer-events:none;white-space:pre-wrap;line-height:1.7;}
+.block-wrap{border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:.65rem;}
+.block-wrap.meigen{border-color:var(--indigo-dim);}.block-wrap.omamori{border-color:var(--amber-dim);}
+.block-header{display:flex;align-items:center;justify-content:space-between;padding:.3rem .7rem;background:#0f0f12;border-bottom:1px solid var(--border);}
+.block-label{font-size:10px;color:var(--muted);letter-spacing:.08em;}
+.copy-btn{font-size:10px;background:#1a1a1e;border:1px solid var(--border);color:var(--muted);border-radius:3px;padding:3px 10px;cursor:pointer;transition:color .15s,border-color .15s;-webkit-tap-highlight-color:transparent;}
+.copy-btn.copied{color:#4ade80;border-color:#16a34a;}
+.block-body{padding:.75rem;font-size:13px;color:#a8a8b8;white-space:pre-wrap;line-height:1.85;}
+.block-body.meigen{font-family:monospace;letter-spacing:.04em;color:#a5b4fc;font-size:14px;}
+.block-body.omamori{font-family:'Hiragino Mincho ProN','Yu Mincho',Georgia,serif;color:#fcd34d;font-size:14px;}
+.char-name{display:block;font-size:12px;font-weight:500;padding:.55rem .75rem .1rem;user-select:none;letter-spacing:.05em;}
+.char-name.shizuku{color:#7dd3fc;}.char-name.shiratama{color:#d4d4d8;}.char-name.hiyori{color:#fbbf24;}
+footer{border-top:1px solid var(--border);padding-top:1.5rem;margin-top:3rem;font-size:11px;color:#333338;}
+.totop{position:fixed;bottom:1.25rem;right:1rem;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:18px;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;text-decoration:none;-webkit-tap-highlight-color:transparent;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="badge">精査リライト · 4/19〜4/21 · 15投稿</div>
+  <h1>投稿生成結果 — 第3回精査</h1>
+  <p class="subtitle">静かな調律師 / @coco_canvas</p>
+  <div class="stats">
+    <span class="stat"><strong>12</strong> REVISED</span>
+    <span class="stat"><strong>3</strong> OK（原文維持）</span>
+  </div>
+</header>
+
+<nav class="date-nav">
+  <a href="#date-419">4/19</a>
+  <a href="#date-420">4/20</a>
+  <a href="#date-421">4/21</a>
+</nav>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot shizuku"></span>しずく</div>
+  <div class="legend-item"><span class="legend-dot shiratama"></span>しらたま</div>
+  <div class="legend-item"><span class="legend-dot hiyori"></span>ひより</div>
+</div>
+
+<div class="date-group" id="date-419">
+  <h2 class="date-heading">4月19日（日）</h2>
+  <div class="slot-card is-revised" id="slot-1">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">01</span>
+        <span class="slot-time">06:00</span>
+        <span class="slot-badge x">X</span>
+        <span class="morning-badge">朝 coldness固定</span>
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 4</div>
+    </div>
+    <div class="rev-note">279c→145c圧縮。「我ながら」終止を削除。核心の「順番・経路の問題」だけを残す</div>
+    <div class="thinking" aria-hidden="true">冷徹度9を前面に出しつつ、泥臭さは抑えめに配置。「設計の問題」として切り分ける調律師感を、感情を排した観察口調で滲ませた。初回なので構文パターンの縛りはないが、あえて「問いかけ型」も「励まし型」も避け、淡々とした断定で着地させた。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="「何度言っても伝わらない」という感覚は、たいてい順番の問題だ。
+
+誰に・何を・どの経路で渡すかが間違っているだけで、人が悪いわけでも空気が悪いわけでもない。
+
+▶ 次に「また伝わらなかった」と感じたら、内容より経路を一つだけ変えてみる。
+
+気づくのに、時間がかかりすぎた。
+
+#組織論">コピー</button>
+      </div>
+      <div class="block-body">「何度言っても伝わらない」という感覚は、たいてい順番の問題だ。
+
+誰に・何を・どの経路で渡すかが間違っているだけで、人が悪いわけでも空気が悪いわけでもない。
+
+▶ 次に「また伝わらなかった」と感じたら、内容より経路を一つだけ変えてみる。
+
+気づくのに、時間がかかりすぎた。
+
+#組織論</div>
+    </div>
+    
+    <div class="block-wrap meigen">
+      <span class="char-name shizuku">しずく</span>
+      <div class="block-header"><span class="block-label">名言</span><button class="copy-btn" data-text="回路が壊れてる、人じゃない💎">コピー</button></div>
+      <div class="block-body meigen">回路が壊れてる、人じゃない💎</div>
+    </div>
+    
+  </div>
+  <div class="slot-card is-revised" id="slot-2">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">02</span>
+        <span class="slot-time">07:00</span>
+        <span class="slot-badge threads">Threads</span>
+        <span class="morning-badge">朝 coldness固定</span>
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 9</div>
+    </div>
+    <div class="rev-note">「輪郭」→「自分を保つこと」に置換。体内の二重💍を一本の問いかけ末尾にまとめた</div>
+    <div class="thinking" aria-hidden="true">今回は「距離をとること＝冷たさ」という誤解を静かに解体する方向で。パンクさは「離れることを選んだのは愛情だった、という可能性」を一切フォローせず置き去りにする形で滲ませた。お守り言葉はしずくを選択。前回の「回路が壊れてる、人じゃない」という属性断言とは違い、今回は行為そのものを静かに断ち切る構文にした。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="離れたことを、冷たかったと言われた。
+
+でも近くにいることが全員への誠実さじゃない、というのも、20年くらい人の間で仕事してきてわかった気がする。
+
+うまく言えないけど。
+近づき続けることで、何かが少しずつ嘘になっていく感覚、あれは無視しない方がいい。
+
+適切な距離って、相手への諦めじゃなくて、自分を保つことだと今は思う。
+
+近くにいることを、誠実さだと思ってた時期はある？💍
+
+#距離感">コピー</button>
+      </div>
+      <div class="block-body">離れたことを、冷たかったと言われた。
+
+でも近くにいることが全員への誠実さじゃない、というのも、20年くらい人の間で仕事してきてわかった気がする。
+
+うまく言えないけど。
+近づき続けることで、何かが少しずつ嘘になっていく感覚、あれは無視しない方がいい。
+
+適切な距離って、相手への諦めじゃなくて、自分を保つことだと今は思う。
+
+近くにいることを、誠実さだと思ってた時期はある？💍
+
+#距離感</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shizuku">しずく</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="離れることが、やさしさだった日もある。💍">コピー</button></div>
+      <div class="block-body omamori">離れることが、やさしさだった日もある。💍</div>
+    </div>
+  </div>
+  <div class="slot-card " id="slot-3">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">03</span>
+        <span class="slot-time">10:00</span>
+        <span class="slot-badge threads">Threads</span>
+        
+        <span class="ok-badge">OK</span>
+      </div>
+      <div class="slot-params">冷徹 2 / 泥臭さ 10</div>
+    </div>
+    
+    <div class="thinking" aria-hidden="true">パンクさは「嫌いな人を大事にしてしまう」という行儀の悪い本音に一滴だけ滲ませた。お守り言葉の質は「しらたま」を選択——軽く転がしながら、芯だけ残す。前回は「離れることが〜だった」という過去形の断言構文。今回は現在進行形の曖昧な感触で終わらせ、解釈を開いたまま渡す。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="好きな人より、嫌いな人の方をずっと気にしてた時期がある。
+
+それが愛情の形だと思ってたわけじゃない。
+ただ、消えない引っかかりを、大事にすることと混同してたんだと思う。
+
+ある日ふと、その人のことを何時間も考えてる自分に気づいて——
+あ、これ、もう返してもらえないものに払い続けてる賃料だな、と。
+
+諦めた瞬間より、飽きた瞬間の方が、静かだった。
+
+今日だけ、一人誰かの顔を頭から降ろしてみる？
+
+その人、本当に必要だったっけ。💍
+
+#人間関係">コピー</button>
+      </div>
+      <div class="block-body">好きな人より、嫌いな人の方をずっと気にしてた時期がある。
+
+それが愛情の形だと思ってたわけじゃない。
+ただ、消えない引っかかりを、大事にすることと混同してたんだと思う。
+
+ある日ふと、その人のことを何時間も考えてる自分に気づいて——
+あ、これ、もう返してもらえないものに払い続けてる賃料だな、と。
+
+諦めた瞬間より、飽きた瞬間の方が、静かだった。
+
+今日だけ、一人誰かの顔を頭から降ろしてみる？
+
+その人、本当に必要だったっけ。💍
+
+#人間関係</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shiratama">しらたま</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="飽きることも、ひとつの答えだった。💍">コピー</button></div>
+      <div class="block-body omamori">飽きることも、ひとつの答えだった。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-4">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">04</span>
+        <span class="slot-time">19:00</span>
+        <span class="slot-badge threads">Threads</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 1 / 泥臭さ 3</div>
+    </div>
+    <div class="rev-note">4連続 距離感 投稿で飽和。「言葉にならない感覚/受け取ってもらえる安心」テーマに転換</div>
+    <div class="thinking" aria-hidden="true">泥臭さ度3/10なので、今日は少し乾いた静けさの中に、湿度だけ少し残す。パンクさは「一緒にいるのが正しいとは限らない」という部分に滲ませた。お守り言葉はしらたまを選択。前回が「飽きることも、ひとつの答えだった」という断言+名詞締めだったので、今回は途中で少し崩れる口調にして、着地をあえてぼかす。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="モヤモヤしてるのに、何がモヤモヤしてるかわからない日がある。
+
+感情に名前をつけようとして、うまくいかなくて、
+結局「ちょっと疲れた」で終わらせていた。
+
+でもそういう日に「うまく言えないけど、大変そうだったね」って言ってくれた人がいて、
+それだけで少し楽になった記憶がある。
+
+名前がつかなくていい。説明できなくていい。
+
+感じていることは、ちゃんと、ほんとうのこと。
+
+今日、自分の重さに一言だけ名前をつけてみる？💍
+
+#ひとりごと">コピー</button>
+      </div>
+      <div class="block-body">モヤモヤしてるのに、何がモヤモヤしてるかわからない日がある。
+
+感情に名前をつけようとして、うまくいかなくて、
+結局「ちょっと疲れた」で終わらせていた。
+
+でもそういう日に「うまく言えないけど、大変そうだったね」って言ってくれた人がいて、
+それだけで少し楽になった記憶がある。
+
+名前がつかなくていい。説明できなくていい。
+
+感じていることは、ちゃんと、ほんとうのこと。
+
+今日、自分の重さに一言だけ名前をつけてみる？💍
+
+#ひとりごと</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shiratama">しらたま</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="うまく言えなくても、本物だった。💍">コピー</button></div>
+      <div class="block-body omamori">うまく言えなくても、本物だった。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-5">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">05</span>
+        <span class="slot-time">22:00</span>
+        <span class="slot-badge x">X</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 6</div>
+    </div>
+    <div class="rev-note">227c→200c圧縮。「我ながらもったいなかった」終止を「設計の穴から目をそらしていた」に変更</div>
+    <div class="thinking" aria-hidden="true">冷徹度9を活かし、「問題は人ではなく構造」という調律師の核心を無感情に滑り込ませる。前回が「置いたまま」という静止の構文だったので、今回は動いているのに空回りしている状態を切り取る。泥臭さは6止まりで、格好悪さをちょうど1箇所だけ入れる。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="スタッフが何度も同じミスをして、三回目で声が低くなった。
+
+あとで気づいたのは、確認するタイミングを誰も決めていなかっただけだった。
+
+本人の意識の問題じゃない。チェックが発生する構造が、存在していなかった。
+
+怒りが育つほど、設計の見落としが隠れる。
+
+▶ 「誰が」悪いを止めて、「どこで」抜けるかだけを図に書く。付箋一枚でいい。
+
+怒っている間、ずっと設計の穴から目をそらしていた。
+
+#組織論">コピー</button>
+      </div>
+      <div class="block-body">スタッフが何度も同じミスをして、三回目で声が低くなった。
+
+あとで気づいたのは、確認するタイミングを誰も決めていなかっただけだった。
+
+本人の意識の問題じゃない。チェックが発生する構造が、存在していなかった。
+
+怒りが育つほど、設計の見落としが隠れる。
+
+▶ 「誰が」悪いを止めて、「どこで」抜けるかだけを図に書く。付箋一枚でいい。
+
+怒っている間、ずっと設計の穴から目をそらしていた。
+
+#組織論</div>
+    </div>
+    
+    <div class="block-wrap meigen">
+      <span class="char-name shiratama">しらたま</span>
+      <div class="block-header"><span class="block-label">名言</span><button class="copy-btn" data-text="怒りは、設計ミスの煙だ💎">コピー</button></div>
+      <div class="block-body meigen">怒りは、設計ミスの煙だ💎</div>
+    </div>
+    
+  </div>
+</div>
+<div class="date-group" id="date-420">
+  <h2 class="date-heading">4月20日（月）</h2>
+  <div class="slot-card is-revised" id="slot-6">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">06</span>
+        <span class="slot-time">06:00</span>
+        <span class="slot-badge x">X</span>
+        <span class="morning-badge">朝 coldness固定</span>
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 3</div>
+    </div>
+    <div class="rev-note">NGワード「たぶん」除去。243c→202c圧縮。「我ながら」終止を削除</div>
+    <div class="thinking" aria-hidden="true">冷徹度10を活かし、感情論を一切排除した構造診断の視点で貫く。前回が「怒りは設計ミスの煙」という比喩構文だったので、今回は比喩を使わず、むしろ乾いた事実の羅列で刺す形に。泥臭さ3なので現場エピソードは薄めに留め、余韻に少しだけ人間の匂いを滲ませる。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="BAR時代、月次の売上が落ちたとき、疑ったのはスタッフじゃなくてカウンターの動線だった。
+
+グラスを置く位置が20センチずれてるだけで、接客の会話が1テーブル40秒短くなってた。
+
+人の問題に見えるものは、たいてい設計の問題だ。
+
+▶ 来週の1on1、テーマを「あなたに問題がある」から「この仕組みに何が足りないか」に変えてみる。話す内容が変わる。相手の表情が変わる。
+
+そちらのほうが、ずっと先に進む。
+
+#組織論">コピー</button>
+      </div>
+      <div class="block-body">BAR時代、月次の売上が落ちたとき、疑ったのはスタッフじゃなくてカウンターの動線だった。
+
+グラスを置く位置が20センチずれてるだけで、接客の会話が1テーブル40秒短くなってた。
+
+人の問題に見えるものは、たいてい設計の問題だ。
+
+▶ 来週の1on1、テーマを「あなたに問題がある」から「この仕組みに何が足りないか」に変えてみる。話す内容が変わる。相手の表情が変わる。
+
+そちらのほうが、ずっと先に進む。
+
+#組織論</div>
+    </div>
+    
+    <div class="block-wrap meigen">
+      <span class="char-name hiyori">ひより</span>
+      <div class="block-header"><span class="block-label">名言</span><button class="copy-btn" data-text="問題は、いつも人より先にある💎">コピー</button></div>
+      <div class="block-body meigen">問題は、いつも人より先にある💎</div>
+    </div>
+    
+  </div>
+  <div class="slot-card is-revised" id="slot-7">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">07</span>
+        <span class="slot-time">07:00</span>
+        <span class="slot-badge threads">Threads</span>
+        <span class="morning-badge">朝 coldness固定</span>
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 3</div>
+    </div>
+    <div class="rev-note">本文中の独立💍行「あなたの「心地よい距離」は〜」を削除。問いかけ末尾に💍を移動</div>
+    <div class="thinking" aria-hidden="true">パンクさは「離れることが正解だと思ってたけど、それも違った」という静かな裏切りとして滲ませた。お守り言葉はしずくを選択。前回は「問題は、いつも人より先にある」という因果構文だったので、今回は断ち切り型の名詞止めで差をつけた。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="距離を置いたのに、楽にならなかった。
+
+遠ざかれば解決すると思っていた時期がある。
+でも問題は、距離じゃなかった。
+自分が何を「近い」と感じているか、
+その感覚の名前を知らなかっただけだった。
+
+それに気づいた夜は、少しだけ静かになった。
+怒りでも安堵でもなく、ただ静かに。
+
+今夜、自分の「ちょうどいい距離」を一つだけ思い浮かべてみる？💍
+
+#距離感">コピー</button>
+      </div>
+      <div class="block-body">距離を置いたのに、楽にならなかった。
+
+遠ざかれば解決すると思っていた時期がある。
+でも問題は、距離じゃなかった。
+自分が何を「近い」と感じているか、
+その感覚の名前を知らなかっただけだった。
+
+それに気づいた夜は、少しだけ静かになった。
+怒りでも安堵でもなく、ただ静かに。
+
+今夜、自分の「ちょうどいい距離」を一つだけ思い浮かべてみる？💍
+
+#距離感</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shizuku">しずく</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="感じ方は、譲らなくていい。💍">コピー</button></div>
+      <div class="block-body omamori">感じ方は、譲らなくていい。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-8">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">08</span>
+        <span class="slot-time">10:00</span>
+        <span class="slot-badge threads">Threads</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 2 / 泥臭さ 9</div>
+    </div>
+    <div class="rev-note">5連続 距離感 で飽和。「自分の機嫌を取る」テーマに転換。💍の二重埋め込みも解消</div>
+    <div class="thinking" aria-hidden="true">パンクさは「人に合わせることを美徳にしてきた」という自己批判的な本音で一箇所滲ませた。お守り言葉はひよりを選択。前回は「感じ方は、譲らなくていい」という断言構文だったので、今回は余韻で閉じる柔らかい包みかたに変えた。文末は問いを軽く投げて、答えを求めない距離感で。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="機嫌が悪いとき、誰のせいにもできない日がある。
+
+疲れている自分に気づかないまま、細かいことが気になり始める。
+あ、これもう限界のサインだな、と気づくのが、また遅かった。
+
+自分の機嫌の取り方が下手だと気づいたのは、わりと最近のこと。
+
+上手にやらなくていいから、今日だけ少し休ませてあげる？💍
+
+#ひとりごと">コピー</button>
+      </div>
+      <div class="block-body">機嫌が悪いとき、誰のせいにもできない日がある。
+
+疲れている自分に気づかないまま、細かいことが気になり始める。
+あ、これもう限界のサインだな、と気づくのが、また遅かった。
+
+自分の機嫌の取り方が下手だと気づいたのは、わりと最近のこと。
+
+上手にやらなくていいから、今日だけ少し休ませてあげる？💍
+
+#ひとりごと</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name hiyori">ひより</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="自分の機嫌を、誰かのせいにしなかった日がある。💍">コピー</button></div>
+      <div class="block-body omamori">自分の機嫌を、誰かのせいにしなかった日がある。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-9">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">09</span>
+        <span class="slot-time">19:00</span>
+        <span class="slot-badge threads">Threads</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 1 / 泥臭さ 5</div>
+    </div>
+    <div class="rev-note">「輪郭がぼやけていく」→「感覚が薄れていく」に置換（輪郭はApr13-18で多用済み）。ハッシュタグも#距離感→#ひとりごと</div>
+    <div class="thinking" aria-hidden="true">今日の呼吸：泥臭さ5、冷徹1。しらたま質感を選ぶ。軽く転がしながら、芯だけ残す。前回「間合いは、その人の形をしている」は構造が「Aは、BのCをしている」型。今回は動詞で断つ形にする。行儀の悪い本音は「好かれようとして失った時間」に静かに置く。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="嫌われないように動いてた時期、一番自分から遠かった。
+
+誰かに合わせるのが上手くなるほど、自分の感覚が薄れていく。
+それを「大人になった」と呼んでいた時期が、わたしにもある。
+
+そういう疲れ方、言語化できなくてもおかしくない。
+名前がつかないまま、ただ重かっただけ、みたいな感じ。
+
+ある日ふっと、「この人といると疲れないな」に気づいた。
+それだけで、何かが少し動いた気がした。
+
+今日いる場所、少し観察してみる？💍
+
+#ひとりごと">コピー</button>
+      </div>
+      <div class="block-body">嫌われないように動いてた時期、一番自分から遠かった。
+
+誰かに合わせるのが上手くなるほど、自分の感覚が薄れていく。
+それを「大人になった」と呼んでいた時期が、わたしにもある。
+
+そういう疲れ方、言語化できなくてもおかしくない。
+名前がつかないまま、ただ重かっただけ、みたいな感じ。
+
+ある日ふっと、「この人といると疲れないな」に気づいた。
+それだけで、何かが少し動いた気がした。
+
+今日いる場所、少し観察してみる？💍
+
+#ひとりごと</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shiratama">しらたま</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="疲れない人といる、それだけでいい。💍">コピー</button></div>
+      <div class="block-body omamori">疲れない人といる、それだけでいい。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-10">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">10</span>
+        <span class="slot-time">22:00</span>
+        <span class="slot-badge x">X</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 1 / 泥臭さ 9</div>
+    </div>
+    <div class="rev-note">284c→214c圧縮。4回目の「我ながら」終止を「それだけをやっていなかった」に変更</div>
+    <div class="thinking" aria-hidden="true">冷徹度1、泥臭さ9という配分を優先し、今回は「格好悪さを正直に出す」方向で呼吸を作った。前回の「疲れない人といる」という関係性の構文とは差分を出し、今回は「会議・場の設計」という具体的な構造問題を軸にした。調律師らしさは「静かに切り分ける」感触ではなく、むしろ自分の失敗を素材に滲ませることで出す。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="会議を仕切りながら、ずっとズレてると思っていた。
+
+終わってから「よかったですよ」と言われた。
+伝わったんじゃなくて、場が終わったことへの安堵だった。
+
+問題はファシリテーションじゃなく、何を決める場か誰も決めていなかったことだ。
+
+ゴールのない場で頑張っても、それは熱量の消費だ。
+
+▶ 次の会議の冒頭で「今日何が決まれば終わりか」を声に出す。それだけでいい。
+
+10年、それだけをやっていなかった。
+
+#組織論">コピー</button>
+      </div>
+      <div class="block-body">会議を仕切りながら、ずっとズレてると思っていた。
+
+終わってから「よかったですよ」と言われた。
+伝わったんじゃなくて、場が終わったことへの安堵だった。
+
+問題はファシリテーションじゃなく、何を決める場か誰も決めていなかったことだ。
+
+ゴールのない場で頑張っても、それは熱量の消費だ。
+
+▶ 次の会議の冒頭で「今日何が決まれば終わりか」を声に出す。それだけでいい。
+
+10年、それだけをやっていなかった。
+
+#組織論</div>
+    </div>
+    
+    <div class="block-wrap meigen">
+      <span class="char-name shizuku">しずく</span>
+      <div class="block-header"><span class="block-label">名言</span><button class="copy-btn" data-text="場の空気より、場の骨格💎">コピー</button></div>
+      <div class="block-body meigen">場の空気より、場の骨格💎</div>
+    </div>
+    
+  </div>
+</div>
+<div class="date-group" id="date-421">
+  <h2 class="date-heading">4月21日（火）</h2>
+  <div class="slot-card is-revised" id="slot-11">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">11</span>
+        <span class="slot-time">06:00</span>
+        <span class="slot-badge x">X</span>
+        <span class="morning-badge">朝 coldness固定</span>
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 3</div>
+    </div>
+    <div class="rev-note">349c→190c圧縮。「スタッフが辞めます」テーマ5本目。「強い人の消耗=信頼の盲点」角度に転換</div>
+    <div class="thinking" aria-hidden="true">冷徹度9を軸に、泥臭さは抑えめで。「構造の問題」として切り分ける視点を前面に出す。初回なのでパターンの縛りはないが、調律師らしい「感情を動かさず、仕組みを動かす」温度感を滲ませた。余韻はズラしながら、少し宙に浮かせた。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="「あの人なら大丈夫」という言葉が、一番危ない。
+
+強い人ほど言わない。頑張る。消耗が見えない。
+周囲が「安定している」と評価するほど、気づかれないまま限界に近づいている。
+
+強さへの信頼が、サポートの抜け穴になる。
+
+▶ 「この人なら大丈夫」と思っている人に、今週一度だけ「最近どう？」を送る。それだけでいい。
+
+気づいた頃には、もういなかった。
+
+#組織論">コピー</button>
+      </div>
+      <div class="block-body">「あの人なら大丈夫」という言葉が、一番危ない。
+
+強い人ほど言わない。頑張る。消耗が見えない。
+周囲が「安定している」と評価するほど、気づかれないまま限界に近づいている。
+
+強さへの信頼が、サポートの抜け穴になる。
+
+▶ 「この人なら大丈夫」と思っている人に、今週一度だけ「最近どう？」を送る。それだけでいい。
+
+気づいた頃には、もういなかった。
+
+#組織論</div>
+    </div>
+    
+    <div class="block-wrap meigen">
+      <span class="char-name shiratama">しらたま</span>
+      <div class="block-header"><span class="block-label">名言</span><button class="copy-btn" data-text="人が壊れる前に、設計が壊れている💎">コピー</button></div>
+      <div class="block-body meigen">人が壊れる前に、設計が壊れている💎</div>
+    </div>
+    
+  </div>
+  <div class="slot-card " id="slot-12">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">12</span>
+        <span class="slot-time">07:00</span>
+        <span class="slot-badge threads">Threads</span>
+        <span class="morning-badge">朝 coldness固定</span>
+        <span class="ok-badge">OK</span>
+      </div>
+      <div class="slot-params">冷徹 9 / 泥臭さ 10</div>
+    </div>
+    
+    <div class="thinking" aria-hidden="true">今回のパンクさの滲ませ方：「嫌いな人を好きになろうとしている自分」への静かな嘲笑を一滴だけ。押しつけない、でも行儀は少し悪い。お守り言葉の質：しずく。前回「設計が壊れている」という構文（原因→結果の指摘型）だったので、今回は「行為そのものの無意味さ」を断ち切る形に変える。説明を足さない。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="嫌いな人を好きになろうとする時間、誰のためにも使えなかった。
+
+距離を詰めれば関係が修復できると思っていた時期がある。
+修復じゃなくて、ただ摩耗していただけだった。
+
+なぜか「歩み寄れない自分」を責め続けていた。
+今でもその感覚、完全には消えていない。
+
+ある日、離れることを「諦め」じゃなく「精度」だと思えた。
+
+今日、一人だけ、連絡頻度を落としてみる？
+
+自分との約束を人間関係に置き換えてきたのは、いつからだろう💍
+
+#距離感">コピー</button>
+      </div>
+      <div class="block-body">嫌いな人を好きになろうとする時間、誰のためにも使えなかった。
+
+距離を詰めれば関係が修復できると思っていた時期がある。
+修復じゃなくて、ただ摩耗していただけだった。
+
+なぜか「歩み寄れない自分」を責め続けていた。
+今でもその感覚、完全には消えていない。
+
+ある日、離れることを「諦め」じゃなく「精度」だと思えた。
+
+今日、一人だけ、連絡頻度を落としてみる？
+
+自分との約束を人間関係に置き換えてきたのは、いつからだろう💍
+
+#距離感</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shizuku">しずく</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="好きになれない人がいる。それでいい。💍">コピー</button></div>
+      <div class="block-body omamori">好きになれない人がいる。それでいい。💍</div>
+    </div>
+  </div>
+  <div class="slot-card " id="slot-13">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">13</span>
+        <span class="slot-time">10:00</span>
+        <span class="slot-badge threads">Threads</span>
+        
+        <span class="ok-badge">OK</span>
+      </div>
+      <div class="slot-params">冷徹 0 / 泥臭さ 10</div>
+    </div>
+    
+    <div class="thinking" aria-hidden="true">泥臭さ10を意識し、「嫌いじゃないけど近づきたくない」という人間関係の中間地帯をテーマに選んだ。パンクさは「好かれようとするのが一番疲れる」という一行でさりげなく滲ませた。お守り言葉はしらたまを選択——軽く転がしながら、芯だけ残す。前回は「好きになれない人がいる。それでいい」という断言構文だったので、今回は問いを内包した流し方にずらした。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="嫌いじゃない、でも会いたくない。
+その気持ちに名前をつけなくていい。
+
+誰かを「好き」か「嫌い」かで仕分けてきたけど、
+どちらでもない人が一番多かった気がする。
+
+好かれようとするのが一番疲れる。
+それに気づいたの、ずいぶん遅かった。
+
+「どちらでもない」が、案外静かで居心地よかったりする。
+
+今日、少し連絡を返すのを遅らせてみた？
+
+自分の「どちらでもない」を、大事にしてるか。💍
+
+#距離感">コピー</button>
+      </div>
+      <div class="block-body">嫌いじゃない、でも会いたくない。
+その気持ちに名前をつけなくていい。
+
+誰かを「好き」か「嫌い」かで仕分けてきたけど、
+どちらでもない人が一番多かった気がする。
+
+好かれようとするのが一番疲れる。
+それに気づいたの、ずいぶん遅かった。
+
+「どちらでもない」が、案外静かで居心地よかったりする。
+
+今日、少し連絡を返すのを遅らせてみた？
+
+自分の「どちらでもない」を、大事にしてるか。💍
+
+#距離感</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shiratama">しらたま</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="どちらでもない、でいい。それが本音なら。💍">コピー</button></div>
+      <div class="block-body omamori">どちらでもない、でいい。それが本音なら。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-14">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">14</span>
+        <span class="slot-time">19:00</span>
+        <span class="slot-badge threads">Threads</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 6</div>
+    </div>
+    <div class="rev-note">NGワード「たぶん」×2、「正直」×1をすべて除去。イントロを「好かれようとして/嫌われたくなくて」の問いかけ構造に再構成</div>
+    <div class="thinking" aria-hidden="true">パンクさは「感謝を返せなかった夜」という行動レベルの告白として1滴だけ滲ませた。お守り言葉はしずくを選択。前回の「どちらでもない、でいい」という逆接構文との差分として、今回は断言の後に何も補わず、言葉を途中で立ち止まらせる形にした。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="好かれようとして近づいたのか、嫌われたくなくて動いたのか——
+どちらだったか、もう分からなくなってきた頃が、
+関係の本当の始まりだった気がしている。
+
+感謝を伝えそびれたまま疎遠になった人が、何人かいる。
+それが正解だったかどうかは、今でも分からない。
+
+ただ。
+「あのとき言えなかった」より、
+「あのとき、そこにいた」の方が
+長く残る気がしている。
+
+今日、一人だけ思い出してみる？
+
+あなたの「そこにいた」は、誰ですか。💍
+
+#人間関係">コピー</button>
+      </div>
+      <div class="block-body">好かれようとして近づいたのか、嫌われたくなくて動いたのか——
+どちらだったか、もう分からなくなってきた頃が、
+関係の本当の始まりだった気がしている。
+
+感謝を伝えそびれたまま疎遠になった人が、何人かいる。
+それが正解だったかどうかは、今でも分からない。
+
+ただ。
+「あのとき言えなかった」より、
+「あのとき、そこにいた」の方が
+長く残る気がしている。
+
+今日、一人だけ思い出してみる？
+
+あなたの「そこにいた」は、誰ですか。💍
+
+#人間関係</div>
+    </div>
+    
+    
+    <div class="block-wrap omamori">
+      <span class="char-name shizuku">しずく</span>
+      <div class="block-header"><span class="block-label">お守り言葉</span><button class="copy-btn" data-text="言えなかったことが、消えたわけじゃない。💍">コピー</button></div>
+      <div class="block-body omamori">言えなかったことが、消えたわけじゃない。💍</div>
+    </div>
+  </div>
+  <div class="slot-card is-revised" id="slot-15">
+    <div class="slot-header">
+      <div class="slot-meta">
+        <span class="slot-num">15</span>
+        <span class="slot-time">22:00</span>
+        <span class="slot-badge x">X</span>
+        
+        <span class="rev-badge">REVISED</span>
+      </div>
+      <div class="slot-params">冷徹 10 / 泥臭さ 0</div>
+    </div>
+    <div class="rev-note">286c→208c圧縮。▶アクション節を簡潔化</div>
+    <div class="thinking" aria-hidden="true">冷徹度10、泥臭さ0の今日は「感情を排した構造解析」を軸に置く。前回が「言えなかった」という感情の余韻で終わる構文だったので、今回は感情すら設計の外側に追い出す冷たさを優先した。調律師らしさは「感情ではなく構造が音を出している」という視点で滲ませる。</div>
+    
+    <div class="block-wrap">
+      <div class="block-header">
+        <span class="block-label">本文</span>
+        <button class="copy-btn" data-text="1on1を週1で入れたら「ちゃんとやってる感」が出てきて、なんとなく自分が良いリーダーになった気がした。
+
+三ヶ月後、離職率は変わっていなかった。
+
+1on1は会話の機会じゃない。情報が上に届かない構造を放置したまま対話の頻度を上げても、漏水した配管に水を足すだけだ。
+
+▶ 1on1の内容を書き出して「これ、仕組みで解決できるか？」を問う。そうなら、その会話は設計の失敗を補填しているだけだ。
+
+丁寧さは、時々目を曇らせる。
+
+#組織設計">コピー</button>
+      </div>
+      <div class="block-body">1on1を週1で入れたら「ちゃんとやってる感」が出てきて、なんとなく自分が良いリーダーになった気がした。
+
+三ヶ月後、離職率は変わっていなかった。
+
+1on1は会話の機会じゃない。情報が上に届かない構造を放置したまま対話の頻度を上げても、漏水した配管に水を足すだけだ。
+
+▶ 1on1の内容を書き出して「これ、仕組みで解決できるか？」を問う。そうなら、その会話は設計の失敗を補填しているだけだ。
+
+丁寧さは、時々目を曇らせる。
+
+#組織設計</div>
+    </div>
+    
+    <div class="block-wrap meigen">
+      <span class="char-name hiyori">ひより</span>
+      <div class="block-header"><span class="block-label">名言</span><button class="copy-btn" data-text="対話は補修じゃない💎">コピー</button></div>
+      <div class="block-body meigen">対話は補修じゃない💎</div>
+    </div>
+    
+  </div>
+</div>
+
+<footer>静かな調律師 / 精査リライト v4.2 · 4/19〜4/21</footer>
+</div>
+<a href="#" class="totop">↑</a>
+<script>
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    const text=btn.dataset.text;
+    try{await navigator.clipboard.writeText(text);}
+    catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}
+    btn.textContent='コピー済';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='コピー';btn.classList.remove('copied');},2000);
+  });
+});
+</script>
+</body>
+</html>
